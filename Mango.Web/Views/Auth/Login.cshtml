@@ -5,15 +5,14 @@
         <div class="row text-center">
             <h1>Login</h1>
         </div>
-        <div class="row text-center">
-            <div asp-validation-summary="All" class="text-danger"></div>
-        </div>
         <div class="row">
             <div class="col-12 col-md-6 offset-md-3 pb-2">
                 <input asp-for="UserName" class="form-control" placeholder="Username..."/>
+                <span asp-validation-for="UserName" class="text-danger" />
             </div>
             <div class="col-12 col-md-6 offset-md-3 pb-2">
                 <input asp-for="Password" class="form-control" placeholder="Password..." />
+                <span asp-validation-for="Password" class="text-danger" />
             </div>
             <div class="col-12 col-md-6 offset-md-3 pb-2">
                 <button type="submit" class="form-control btn btn-success" value="Submit">Login</button>
@@ -21,3 +20,7 @@
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
