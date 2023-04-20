@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CouponDto>
+
+<div class="card shadow border-0 mt-4">
+	<div class="card-header bg-secondary bg-gradient ml-0 py-3">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h1 class="text-white">Coupons List</h1>
+			</div>
+		</div>
+	</div>
+	<div class="card-body p-4">
+		<div class="row pb-3">
+			<div class="col-6">
+			</div>
+			<div class="col-6 text-end">
+				<a class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Create New Coupon</a>
+
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						Coupon Code
+					</th>
+					<th>
+						Discount Amount
+					</th>
+					<th>
+						Minimum Amount
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach(var item in Model)
+				{
+				<tr>
+					<td> @item.CouponCode
+					</td>
+					<td> @((item.DiscountAmount).ToString("c"))
+					</td>
+						<td>
+							@((item.MinAmount).ToString("c"))
+					</td>
+					<td>
+						<a class="btn btn-danger">
+							<i class="bi bi-trash"></i>
+						</a>
+					</td>
+				</tr>
+				}
+			</tbody>
+		</table>
+
+	</div>
+
+</div>
