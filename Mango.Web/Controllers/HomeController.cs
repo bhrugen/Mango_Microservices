@@ -34,7 +34,9 @@ namespace Mango.Web.Controllers
 
             return View(list);
         }
-        
+
+       
+
         public IActionResult Privacy()
         {
             return View();
