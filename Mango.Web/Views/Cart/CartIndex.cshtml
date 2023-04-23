@@ -1,5 +1,5 @@
 ﻿@model CartDto
-
+@if(Model.CartHeader!=null && Model.CartDetails?.Count()>0){
 <form method="post">
     <br />
     <input asp-for="CartHeader.UserId" hidden />
@@ -92,3 +92,9 @@
         </div>
     </div>
 </form>
+}
+else{
+    <div>
+        <p>Please add items to cart.</p>
+    </div>
+}
