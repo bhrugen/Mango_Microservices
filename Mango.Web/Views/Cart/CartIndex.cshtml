@@ -2,6 +2,8 @@
 
 <form method="post">
     <br />
+    <input asp-for="CartHeader.UserId" hidden />
+    <input asp-for="CartHeader.CartHeaderId" hidden />
     <div class="">
         <div class="card border mt-4 container">
             <div class="card-header bg-dark text-light ml-0 row ">
@@ -57,13 +59,25 @@
                 <hr />
                 <div class="row">
                     <div class="col-6">
-                        <span>Coupon:</span>
-                        <input />
-                        <button type="submit" class="btn btn-sm btn-success"> Apply </button>
+                        @if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
+                        {
+                            <span>Coupon:</span>
+                            <input asp-for="CartHeader.CouponCode" />
+                            <button type="submit" asp-action="ApplyCoupon" class="btn btn-sm btn-success"> Apply </button>
+                        }
+                        else
+                        {
+                            <span>Coupon:</span>
+                            <input asp-for="CartHeader.CouponCode" disabled/>
+                            <button type="submit" asp-action="RemoveCoupon" class="btn btn-sm btn-success"> Remove </button>
+                        }
                     </div>
                     <div class="col-6 text-end">
-                        <span class="text-danger" style="font-size:21px;">  Order Total : $$ <br /></span>
-                        <span class="text-success"> Order Discount :  $$</span>
+                        <span class="text-danger" style="font-size:21px;">  Order Total :  @string.Format("{0:c}", Model.CartHeader.CartTotal)  <br /></span>
+                        @if (Model.CartHeader.Discount > 0)
+                        {
+                            <span class="text-success"> Order Discount :   @string.Format("{0:c}", Model.CartHeader.Discount ) </span>
+                        }
                     </div>
                 </div>
             </div>
@@ -72,7 +86,7 @@
                     <button type="submit" class="btn btn-outline-danger form-control">Email Cart</button>
                 </div>
                 <div class="col-6 col-md-3 offset-md-6">
-                    <button disabled class="btn btn-success form-control " value="Checkout (Comming Soon!)" />
+                    <button disabled class="btn btn-success form-control">Checkout (Comming Soon!)" </button>
                 </div>
             </div>
         </div>
