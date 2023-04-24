@@ -38,7 +38,7 @@ namespace Mango.Services.OrderAPI.Controllers
                 orderHeaderDto.Status = SD.Status_Pending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
 
-                OrderHeader orderCreated = await _db.OrderHeaders.AddAsync(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
+                OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
                 await _db.SaveChangesAsync();
 
                 orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
