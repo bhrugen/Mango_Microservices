@@ -51,13 +51,13 @@
                                 <div class="row my-1">
                                     <div class="col-3">Session ID</div>
                                     <div class="col-9">
-                                        <input readonly class="form-control" />
+                                        <input asp-for="StripeSessionId" readonly class="form-control" />
                                     </div>
                                 </div>
                                 <div class="row my-1">
                                     <div class="col-3">Payment Intent ID</div>
                                     <div class="col-9">
-                                        <input readonly class="form-control" />
+                                        <input asp-for="PaymentIntentId" readonly class="form-control" />
                                     </div>
                                 </div>
                             }
@@ -97,14 +97,28 @@
                                             <h5 class="text-white">TOTAL </h5>
                                         </div>
                                         <div class="col-6 text-end">
-                                            <h5 class="text-white">OrderTotal</h5>
+                                            <h5 class="text-white">@Model.OrderTotal.ToString("c")</h5>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
 
-                            <button type="submit" class="btn btn-success form-control my-1">Ready for Pickup</button>
-                            <button type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                            @if (User.IsInRole(SD.RoleAdmin))
+                            {
+                                @if (Model.Status == SD.Status_Approved)
+                                {
+                                    <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Ready for Pickup</button>
+                                }
+                                @if (Model.Status == SD.Status_ReadyForPickup)
+                                {
+                                    <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Complete Order</button>
+                                }
+
+                                if (Model.Status == SD.Status_Approved || Model.Status == SD.Status_ReadyForPickup)
+                                {
+                                    <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                                }
+                            }
                         </div>
                     </div>
                 </div>

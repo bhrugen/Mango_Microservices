@@ -39,7 +39,44 @@ namespace Mango.Web.Controllers
             return View(orderHeaderDto);
 		}
 
-		[HttpGet]
+        [HttpPost("OrderReadyForPickup")]
+        public async Task<IActionResult> OrderReadyForPickup(int orderId)
+        {
+            var response = await _orderService.UpdateOrderStatus(orderId,SD.Status_ReadyForPickup);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Status updated successfully";
+                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+            }
+            return View();
+        }
+
+        [HttpPost("CompleteOrder")]
+        public async Task<IActionResult> CompleteOrder(int orderId)
+        {
+            var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Completed);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Status updated successfully";
+                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+            }
+            return View();
+        }
+
+        [HttpPost("CancelOrder")]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Cancelled);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Status updated successfully";
+                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+            }
+            return View();
+        }
+
+
+        [HttpGet]
         public IActionResult GetAll() 
         {
             IEnumerable<OrderHeaderDto> list;
@@ -57,7 +94,7 @@ namespace Mango.Web.Controllers
             {
                 list = new List<OrderHeaderDto>();
             }
-            return Json(new { data = list });
+            return Json(new { data = list.OrderByDescending(u=>u.OrderHeaderId) });
         }
     }
 }
