@@ -57,7 +57,7 @@ namespace Mango.Services.ProductAPI.Controllers
 
        [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Post([FromBody] ProductDto ProductDto)
+        public ResponseDto Post(ProductDto ProductDto)
         {
             try
             {
