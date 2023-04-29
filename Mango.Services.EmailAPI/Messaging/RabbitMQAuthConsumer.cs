@@ -52,7 +52,7 @@ namespace Mango.Services.EmailAPI.Messaging
 
         private async Task HandleMessage(string email)
         {
-
+            _emailService.RegisterUserEmailAndLog(email).GetAwaiter().GetResult();
         }
     }
 }
