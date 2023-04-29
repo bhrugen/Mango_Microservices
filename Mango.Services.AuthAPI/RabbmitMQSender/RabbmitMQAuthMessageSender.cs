@@ -21,21 +21,45 @@ namespace Mango.Services.AuthAPI.RabbmitMQSender
 
         public void SendMessage(object message, string queueName)
         {
-            var factory = new ConnectionFactory
+            if (ConnectionExists())
             {
-                HostName = _hostName,
-                Password = _password,
-                UserName = _username
-            };
 
-            _connection = factory.CreateConnection();
+                using var channel = _connection.CreateModel();
+                channel.QueueDeclare(queueName, false, false, false, null);
+                var json = JsonConvert.SerializeObject(message);
+                var body = Encoding.UTF8.GetBytes(json);
+                channel.BasicPublish(exchange: "", routingKey: queueName, null, body: body);
+            }
 
-            using var channel = _connection.CreateModel();
-            channel.QueueDeclare(queueName,false,false,false,null);
-            var json = JsonConvert.SerializeObject(message);
-            var body = Encoding.UTF8.GetBytes(json);
-            channel.BasicPublish(exchange:"",routingKey:queueName,null, body:body);
+        }
 
+        private void CreateConnection()
+        {
+            try
+            {
+                var factory = new ConnectionFactory
+                {
+                    HostName = _hostName,
+                    Password = _password,
+                    UserName = _username
+                };
+
+                _connection = factory.CreateConnection();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private bool ConnectionExists()
+        {
+            if (_connection == null)
+            {
+                return true;
+            }
+            CreateConnection();
+            return true;
         }
     }
 }
