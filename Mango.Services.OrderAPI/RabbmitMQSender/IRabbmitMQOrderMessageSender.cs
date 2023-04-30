@@ -1,7 +1,7 @@
 ﻿namespace Mango.Services.OrderAPI.RabbmitMQSender
 {
-    public interface IRabbmitMQCartMessageSender
+    public interface IRabbmitMQOrderMessageSender
     {
-        void SendMessage(Object message, string queueName);
+        void SendMessage(Object message, string exchangeName);
     }
 }

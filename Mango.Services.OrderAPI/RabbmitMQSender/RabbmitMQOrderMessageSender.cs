@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mango.Services.OrderAPI.RabbmitMQSender
 {
-    public class RabbmitMQCartMessageSender : IRabbmitMQCartMessageSender
+    public class RabbmitMQOrderMessageSender : IRabbmitMQOrderMessageSender
     {
 
         private readonly string _hostName;
@@ -12,23 +12,23 @@ namespace Mango.Services.OrderAPI.RabbmitMQSender
         private readonly string _password;
         private IConnection _connection;
 
-        public RabbmitMQCartMessageSender()
+        public RabbmitMQOrderMessageSender()
         {
             _hostName = "localhost";
             _password = "guest";
             _username = "guest";
         }
 
-        public void SendMessage(object message, string queueName)
+        public void SendMessage(object message, string exchangeName)
         {
             if (ConnectionExists())
             {
 
                 using var channel = _connection.CreateModel();
-                channel.QueueDeclare(queueName, false, false, false, null);
+                channel.ExchangeDeclare(exchangeName,ExchangeType.Fanout,durable:false);
                 var json = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(json);
-                channel.BasicPublish(exchange: "", routingKey: queueName, null, body: body);
+                channel.BasicPublish(exchange: exchangeName, "", null, body: body);
             }
 
         }
