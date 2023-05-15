@@ -5,7 +5,7 @@
 namespace Mango.Services.CouponAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCouponToDb : Migration
+    public partial class addCouponToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
