@@ -30,8 +30,11 @@ var app = builder.Build();
     app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "AUTH API");
-    c.RoutePrefix = string.Empty;
+    if (!app.Environment.IsDevelopment())
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cart API");
+        c.RoutePrefix = string.Empty;
+    }
 });
 app.UseHttpsRedirection();
 app.UseAuthentication();
