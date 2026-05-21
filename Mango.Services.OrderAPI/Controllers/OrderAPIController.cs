@@ -38,18 +38,18 @@ namespace Mango.Services.OrderAPI.Controllers
 
         [Authorize]
         [HttpGet("GetOrders")]
-        public ResponseDto? Get(string? userId = "")
+        public async Task<ResponseDto?> Get(string? userId = "")
         {
             try
             {
                 IEnumerable<OrderHeader> objList;
                 if (User.IsInRole(SD.RoleAdmin))
                 {
-                    objList = _db.OrderHeaders.Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).ToList();
+                    objList = await _db.OrderHeaders.Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).ToListAsync();
                 }
                 else
                 {
-                    objList = _db.OrderHeaders.Include(u => u.OrderDetails).Where(u=>u.UserId==userId).OrderByDescending(u => u.OrderHeaderId).ToList();
+                    objList = await _db.OrderHeaders.Include(u => u.OrderDetails).Where(u=>u.UserId==userId).OrderByDescending(u => u.OrderHeaderId).ToListAsync();
                 }
                 _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
             }
@@ -63,11 +63,11 @@ namespace Mango.Services.OrderAPI.Controllers
 
         [Authorize]
         [HttpGet("GetOrder/{id:int}")]
-        public ResponseDto? Get(int id)
+        public async Task<ResponseDto?> Get(int id)
         {
             try
             {
-                OrderHeader orderHeader = _db.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
+                OrderHeader orderHeader = await _db.OrderHeaders.Include(u => u.OrderDetails).FirstAsync(u => u.OrderHeaderId == id);
                 _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
             }
             catch (Exception ex)
@@ -119,7 +119,7 @@ namespace Mango.Services.OrderAPI.Controllers
                     CancelUrl = stripeRequestDto.CancelUrl,
                     LineItems = new List<SessionLineItemOptions>(),                     
                     Mode = "payment",
-                    
+
                 };
 
                 var DiscountsObj = new List<SessionDiscountOptions>()
@@ -154,11 +154,11 @@ namespace Mango.Services.OrderAPI.Controllers
                     options.Discounts = DiscountsObj;
                 }
                 var service = new SessionService();
-                Session session = service.Create(options);
+                Session session = await service.CreateAsync(options);
                 stripeRequestDto.StripeSessionUrl = session.Url;
-                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == stripeRequestDto.OrderHeader.OrderHeaderId);
+                OrderHeader orderHeader = await _db.OrderHeaders.FirstAsync(u => u.OrderHeaderId == stripeRequestDto.OrderHeader.OrderHeaderId);
                 orderHeader.StripeSessionId = session.Id;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 _response.Result = stripeRequestDto;
 
             }
@@ -178,20 +178,20 @@ namespace Mango.Services.OrderAPI.Controllers
             try
             {
 
-                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+                OrderHeader orderHeader = await _db.OrderHeaders.FirstAsync(u => u.OrderHeaderId == orderHeaderId);
 
                 var service = new SessionService();
-                Session session = service.Get(orderHeader.StripeSessionId);
+                Session session = await service.GetAsync(orderHeader.StripeSessionId);
 
                 var paymentIntentService = new PaymentIntentService();
-                PaymentIntent paymentIntent = paymentIntentService.Get(session.PaymentIntentId);
+                PaymentIntent paymentIntent = await paymentIntentService.GetAsync(session.PaymentIntentId);
 
                 if(paymentIntent.Status== "succeeded")
                 {
                     //then payment was successful
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                     RewardsDto rewardsDto = new()
                     {
                         OrderId = orderHeader.OrderHeaderId,
@@ -219,7 +219,7 @@ namespace Mango.Services.OrderAPI.Controllers
         {
             try
             {
-                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderId);
+                OrderHeader orderHeader = await _db.OrderHeaders.FirstAsync(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
                     if(newStatus == SD.Status_Cancelled)
@@ -232,10 +232,10 @@ namespace Mango.Services.OrderAPI.Controllers
                         };
 
                         var service = new RefundService();
-                        Refund refund = service.Create(options);
+                        Refund refund = await service.CreateAsync(options);
                     }
                     orderHeader.Status = newStatus;
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                 }
             }
             catch (Exception ex)

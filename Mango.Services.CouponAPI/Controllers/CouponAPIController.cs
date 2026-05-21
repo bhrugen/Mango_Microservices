@@ -4,6 +4,7 @@ using Mango.Services.CouponAPI.Models;
 using Mango.Services.CouponAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Mango.Services.CouponAPI.Controllers
@@ -25,11 +26,11 @@ namespace Mango.Services.CouponAPI.Controllers
         }
 
         [HttpGet]
-        public ResponseDto Get()
+        public async Task<ResponseDto> Get()
         {
             try
             {
-                IEnumerable<Coupon> objList = _db.Coupons.ToList();
+                IEnumerable<Coupon> objList = await _db.Coupons.ToListAsync();
                 _response.Result = _mapper.Map<IEnumerable<CouponDto>>(objList);
             }
             catch (Exception ex)
@@ -42,11 +43,11 @@ namespace Mango.Services.CouponAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public ResponseDto Get(int id)
+        public async Task<ResponseDto> Get(int id)
         {
             try
             {
-                Coupon obj = _db.Coupons.First(u=>u.CouponId==id);
+                Coupon obj = await _db.Coupons.FirstAsync(u=>u.CouponId==id);
                 _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
@@ -59,11 +60,11 @@ namespace Mango.Services.CouponAPI.Controllers
 
         [HttpGet]
         [Route("GetByCode/{code}")]
-        public ResponseDto GetByCode(string code)
+        public async Task<ResponseDto> GetByCode(string code)
         {
             try
             {
-                Coupon obj = _db.Coupons.First(u => u.CouponCode.ToLower()== code.ToLower());
+                Coupon obj = await _db.Coupons.FirstAsync(u => u.CouponCode.ToLower()== code.ToLower());
                 _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
@@ -76,16 +77,16 @@ namespace Mango.Services.CouponAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Post([FromBody] CouponDto couponDto)
+        public async Task<ResponseDto> Post([FromBody] CouponDto couponDto)
         {
             try
             {
                 Coupon obj = _mapper.Map<Coupon>(couponDto);
                 _db.Coupons.Add(obj);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
 
-               
+
                 var options = new Stripe.CouponCreateOptions
                 {
                     AmountOff = (long)(couponDto.DiscountAmount*100),
@@ -94,7 +95,7 @@ namespace Mango.Services.CouponAPI.Controllers
                     Id=couponDto.CouponCode,
                 };
                 var service = new Stripe.CouponService();
-                service.Create(options);
+                await service.CreateAsync(options);
 
 
                 _response.Result = _mapper.Map<CouponDto>(obj);
@@ -110,13 +111,13 @@ namespace Mango.Services.CouponAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Put([FromBody] CouponDto couponDto)
+        public async Task<ResponseDto> Put([FromBody] CouponDto couponDto)
         {
             try
             {
                 Coupon obj = _mapper.Map<Coupon>(couponDto);
                 _db.Coupons.Update(obj);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 _response.Result = _mapper.Map<CouponDto>(obj);
             }
@@ -131,17 +132,17 @@ namespace Mango.Services.CouponAPI.Controllers
         [HttpDelete]
         [Route("{id:int}")]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Delete(int id)
+        public async Task<ResponseDto> Delete(int id)
         {
             try
             {
-                Coupon obj = _db.Coupons.First(u=>u.CouponId==id);
+                Coupon obj = await _db.Coupons.FirstAsync(u=>u.CouponId==id);
                 _db.Coupons.Remove(obj);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
 
                 var service = new Stripe.CouponService();
-                service.Delete(obj.CouponCode);
+                await service.DeleteAsync(obj.CouponCode);
 
 
             }

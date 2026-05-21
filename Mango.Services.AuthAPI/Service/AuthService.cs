@@ -3,6 +3,7 @@ using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mango.Services.AuthAPI.Service
 {
@@ -24,13 +25,13 @@ namespace Mango.Services.AuthAPI.Service
 
         public async Task<bool> AssignRole(string email, string roleName)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
             if (user != null)
             {
-                if (!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
+                if (!await _roleManager.RoleExistsAsync(roleName))
                 {
                     //create role if it does not exist
-                    _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+                    await _roleManager.CreateAsync(new IdentityRole(roleName));
                 }
                 await _userManager.AddToRoleAsync(user, roleName);
                 return true;
@@ -41,7 +42,7 @@ namespace Mango.Services.AuthAPI.Service
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
+            var user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
 
             bool isValid = await _userManager.CheckPasswordAsync(user,loginRequestDto.Password);
 
@@ -87,7 +88,7 @@ namespace Mango.Services.AuthAPI.Service
                 var result =await  _userManager.CreateAsync(user,registrationRequestDto.Password);
                 if (result.Succeeded)
                 {
-                    var userToReturn = _db.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
+                    var userToReturn = await _db.ApplicationUsers.FirstAsync(u => u.UserName == registrationRequestDto.Email);
 
                     UserDto userDto = new()
                     {
