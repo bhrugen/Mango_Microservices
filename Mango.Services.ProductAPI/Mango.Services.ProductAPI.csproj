@@ -16,10 +16,11 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Scalar.AspNetCore" Version="1.2.42" />
+	  <PackageReference Include="Scalar.AspNetCore" Version="1.2.53" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Extensions\" />
     <Folder Include="wwwroot\ProductImages\" />
   </ItemGroup>
 
@@ -29,6 +30,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mango.Services.Shared\Mango.Services.Shared.csproj" />
   </ItemGroup>
 
 </Project>

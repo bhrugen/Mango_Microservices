@@ -1,4 +1,5 @@
 ﻿using Mango.Services.OrderAPI.Models.Dto;
+using Mango.Services.Shared.Models;
 using Mango.Services.ShoppingCartAPI.Service.IService;
 using Newtonsoft.Json;
 

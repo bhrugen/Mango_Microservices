@@ -2,6 +2,7 @@
 using Mango.Services.ProductAPI.Data;
 using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dto;
+using Mango.Services.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

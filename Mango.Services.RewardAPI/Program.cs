@@ -2,9 +2,8 @@ using Mango.Services.RewardAPI.Data;
 using Mango.Services.RewardAPI.Extension;
 using Mango.Services.RewardAPI.Messaging;
 using Mango.Services.RewardAPI.Services;
+using Mango.Services.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,51 +21,26 @@ builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>
 
 builder.Services.AddControllers();
 
-// Add OpenAPI
-builder.Services.AddOpenApi(options =>
-{
-    options.AddDocumentTransformer((document, context, cancellationToken) =>
-    {
-        document.Info = new OpenApiInfo
-        {
-            Title = "Mango Reward API",
-            Version = "v1",
-            Description = "Reward Service API for Mango Microservices"
-        };
-        return Task.CompletedTask;
-    });
-});
+// Add OpenAPI using shared extension (no auth required for background service)
+builder.Services.AddMangoOpenApi(
+    title: "Mango Reward API",
+    description: "Reward Service API for Mango Microservices",
+    requiresAuth: false
+);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(option =>
-    {
-        option.Title = "Mango Reward API";
-    });
-}
+// Configure the HTTP request pipeline using shared extension
+app.UseMangoOpenApi("Mango Reward API");
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
-ApplyMigration();
+
+// Apply migrations using shared extension
+app.ApplyMigrations<AppDbContext>();
+
 app.UseAzureServiceBusConsumer();
 app.Run();
-
-void ApplyMigration()
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        if (_db.Database.GetPendingMigrations().Count() > 0)
-        {
-            _db.Database.Migrate();
-        }
-    }
-}
