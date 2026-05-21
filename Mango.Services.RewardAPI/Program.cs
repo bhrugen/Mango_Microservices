@@ -21,6 +21,9 @@ builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>
 
 builder.Services.AddControllers();
 
+// Add health checks using shared extension
+builder.Services.AddMangoHealthChecks<AppDbContext>("RewardAPI");
+
 // Add OpenAPI using shared extension (no auth required for background service)
 builder.Services.AddMangoOpenApi(
     title: "Mango Reward API",
@@ -29,6 +32,9 @@ builder.Services.AddMangoOpenApi(
 );
 
 var app = builder.Build();
+
+// Configure health check endpoints using shared extension
+app.UseMangoHealthChecks();
 
 // Configure the HTTP request pipeline using shared extension
 app.UseMangoOpenApi("Mango Reward API");

@@ -18,6 +18,10 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSett
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddControllers();
+
+// Add health checks using shared extension
+builder.Services.AddMangoHealthChecks<AppDbContext>("AuthAPI");
+
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMessageBus, MessageBus>();
@@ -30,6 +34,9 @@ builder.Services.AddMangoOpenApi(
 );
 
 var app = builder.Build();
+
+// Configure health check endpoints using shared extension
+app.UseMangoHealthChecks();
 
 // Configure the HTTP request pipeline using shared extension
 app.UseMangoOpenApi("Mango Auth API");

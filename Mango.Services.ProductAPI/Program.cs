@@ -22,6 +22,9 @@ builder.Services.AddAutoMapper(o =>
 
 builder.Services.AddControllers();
 
+// Add health checks using shared extension
+builder.Services.AddMangoHealthChecks<AppDbContext>("ProductAPI");
+
 // Add OpenAPI with JWT Bearer authentication using shared extension
 builder.Services.AddMangoOpenApi(
     title: "Mango Product API",
@@ -34,6 +37,9 @@ builder.AddJwtAuthentication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Configure health check endpoints using shared extension
+app.UseMangoHealthChecks();
 
 // Configure the HTTP request pipeline using shared extension
 app.UseMangoOpenApi("Mango Product API");

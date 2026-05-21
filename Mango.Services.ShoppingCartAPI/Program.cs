@@ -36,6 +36,9 @@ builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddControllers();
 
+// Add health checks using shared extension
+builder.Services.AddMangoHealthChecks<AppDbContext>("ShoppingCartAPI");
+
 // Add OpenAPI with JWT Bearer authentication using shared extension
 builder.Services.AddMangoOpenApi(
     title: "Mango Shopping Cart API",
@@ -48,6 +51,9 @@ builder.AddJwtAuthentication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Configure health check endpoints using shared extension
+app.UseMangoHealthChecks();
 
 // Configure the HTTP request pipeline using shared extension
 app.UseMangoOpenApi("Mango Shopping Cart API");

@@ -23,6 +23,9 @@ builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 builder.Services.AddControllers();
 
+// Add health checks using shared extension
+builder.Services.AddMangoHealthChecks<AppDbContext>("EmailAPI");
+
 // Add OpenAPI using shared extension (no auth required for background service)
 builder.Services.AddMangoOpenApi(
     title: "Mango Email API",
@@ -31,6 +34,9 @@ builder.Services.AddMangoOpenApi(
 );
 
 var app = builder.Build();
+
+// Configure health check endpoints using shared extension
+app.UseMangoHealthChecks();
 
 // Configure the HTTP request pipeline using shared extension
 app.UseMangoOpenApi("Mango Email API");
