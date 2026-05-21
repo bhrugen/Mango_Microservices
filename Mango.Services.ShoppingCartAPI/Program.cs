@@ -31,9 +31,13 @@ builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IMessageBus, MessageBus>();
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"]))
+    .AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>()
+    .AddStandardResilienceHandler("ProductAPI");
 builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(builder.Configuration["ServiceUrls:CouponAPI"]))
+    .AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>()
+    .AddStandardResilienceHandler("CouponAPI");
 builder.Services.AddControllers();
 
 // Add health checks using shared extension
