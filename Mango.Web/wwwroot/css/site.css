@@ -82,7 +82,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
    NAVBAR — Dark, rich, restaurant-feel
    =================================================== */
 .navbar-restaurant {
-    background: var(--charcoal) !important;
+    background: #111111 !important;
     border-bottom: 3px solid var(--brand-primary);
     box-shadow: var(--shadow-lg);
     padding: 0.75rem 0;
@@ -140,7 +140,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 .navbar-restaurant .nav-link:hover,
 .navbar-restaurant .nav-link.active {
     color: var(--brand-light) !important;
-    background: rgba(200, 145, 58, 0.12);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 /* Dropdown */
@@ -149,7 +149,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);
     padding: 0.5rem;
-    background: var(--charcoal-mid);
+    background: #1e1e1e;
     min-width: 210px;
     margin-top: 0.5rem;
     animation: dropIn var(--ease-base) ease;
@@ -717,7 +717,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 }
 
 .card-header.bg-dark-restaurant {
-    background: var(--charcoal);
+    background: #111111;
     color: white;
     border: none;
 }
@@ -845,6 +845,81 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
     outline: none;
 }
 
+/* DataTables — dark mode */
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_length select,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #e8e8e8;
+}
+
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_info,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_length label,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter label {
+    color: #c0c0c0;
+}
+
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: #2a2a2a !important;
+    color: #d0d0d0 !important;
+    border-color: #444 !important;
+    border-radius: var(--radius-md) !important;
+}
+
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #3a3a3a !important;
+    color: #fff !important;
+    border-color: var(--brand-primary) !important;
+}
+
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: var(--brand-primary) !important;
+    color: #fff !important;
+    border-color: var(--brand-primary) !important;
+}
+
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    background: #1e1e1e !important;
+    color: #555 !important;
+    border-color: #333 !important;
+}
+
+[data-bs-theme="dark"] table.dataTable thead th,
+[data-bs-theme="dark"] table.dataTable thead td {
+    background-color: #1e1e1e;
+    border-bottom-color: #444;
+    color: #e8e8e8;
+}
+
+/* Bootstrap table-dark thead fix in dark mode */
+[data-bs-theme="dark"] thead.table-dark th,
+[data-bs-theme="dark"] thead.table-dark td {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+    border-color: #333 !important;
+}
+
+[data-bs-theme="dark"] table.dataTable tbody tr {
+    background-color: #1e1e1e;
+    color: #d0d0d0;
+}
+
+[data-bs-theme="dark"] table.dataTable tbody tr:hover {
+    background-color: #2a2a2a !important;
+}
+
+[data-bs-theme="dark"] table.dataTable.stripe tbody tr.odd,
+[data-bs-theme="dark"] table.dataTable.display tbody tr.odd {
+    background-color: #242424;
+}
+
+[data-bs-theme="dark"] table.dataTable td,
+[data-bs-theme="dark"] table.dataTable th {
+    border-color: #333;
+}
+
 /* ===================================================
    CART
    =================================================== */
@@ -852,13 +927,13 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
     padding: 1.25rem;
     border-radius: var(--radius-lg);
     transition: background var(--ease-fast);
-    border-bottom: 1px solid var(--border-warm);
+    border-bottom: 1px solid rgba(128,128,128,.15);
 }
 
 .cart-item:last-child { border-bottom: none; }
 
 .cart-item:hover {
-    background: var(--restaurant-cream);
+    background: rgba(128, 128, 128, 0.07);
 }
 
 .cart-item img {
@@ -1156,4 +1231,94 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 @media print {
     .navbar-restaurant, .footer-restaurant, .btn { display: none !important; }
     .card { box-shadow: none !important; border: 1px solid var(--border-warm) !important; }
+}
+
+/* ===================================================
+   DARK MODE OVERRIDES  (data-bs-theme="dark")
+   Bootstrap handles most UI components automatically.
+   These rules adapt the custom restaurant classes.
+   =================================================== */
+[data-bs-theme="dark"] {
+    --surface:            #1e1e1e;
+    --restaurant-warm:    #121212;
+    --restaurant-cream:   #1a1a1a;
+    --border-warm:        #3a3a3a;
+    --charcoal:           #e8e8e8;   /* flip text to light */
+    --text-muted:         #a0a0a0;
+}
+
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+    color: #e8e8e8;
+}
+
+[data-bs-theme="dark"] .auth-card {
+    background: #1e1e1e;
+    border: 1px solid #333;
+}
+
+[data-bs-theme="dark"] .auth-card-body .form-label {
+    color: #d0d0d0;
+}
+
+[data-bs-theme="dark"] .menu-card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+[data-bs-theme="dark"] .menu-card-title {
+    color: #e8e8e8;
+}
+
+[data-bs-theme="dark"] .menu-card-description {
+    color: #a0a0a0;
+}
+
+[data-bs-theme="dark"] .card {
+    background: #1e1e1e;
+    border-color: #333;
+    color: #e8e8e8;
+}
+
+[data-bs-theme="dark"] .card-body,
+[data-bs-theme="dark"] .card-footer {
+    background: #1e1e1e;
+}
+
+[data-bs-theme="dark"] .table {
+    color: #d0d0d0;
+    border-color: #333;
+}
+
+[data-bs-theme="dark"] .table td,
+[data-bs-theme="dark"] .table th {
+    border-color: #333;
+}
+
+[data-bs-theme="dark"] .section-label span {
+    background: rgba(255,255,255,.06);
+    color: var(--brand-light);
+}
+
+[data-bs-theme="dark"] .trust-badge {
+    background: rgba(255,255,255,.04);
+    border-color: #3a3a3a;
+}
+
+[data-bs-theme="dark"] .footer-restaurant {
+    background: #0a0a0a;
+}
+
+/* Navbar is always dark — keep toggle button readable in both modes */
+[data-bs-theme="dark"] #themeToggle,
+[data-bs-theme="light"] #themeToggle {
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+[data-bs-theme="dark"] #themeToggle:hover,
+[data-bs-theme="light"] #themeToggle:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+    color: #fff !important;
 }

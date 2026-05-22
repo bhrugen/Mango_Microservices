@@ -86,10 +86,9 @@
 
                     @foreach (var detail in Model.OrderDetails)
                     {
-                        <div class="d-flex align-items-center justify-content-between gap-3 mb-3 p-3"
-                             style="background:var(--restaurant-cream);border-radius:var(--radius-md);border:1px solid var(--border-warm);">
+                        <div class="d-flex align-items-center justify-content-between gap-3 mb-3 p-3 rounded border">
                             <div>
-                                <div style="font-family:Georgia,serif;font-weight:700;font-size:.9rem;color:var(--charcoal);">@detail.ProductName</div>
+                                <div style="font-family:Georgia,serif;font-weight:700;font-size:.9rem;">@detail.ProductName</div>
                                 <div class="text-muted" style="font-size:.8rem;">x @detail.Count &middot; @detail.Price.ToString("c") each</div>
                             </div>
                             <div class="price-tag-sm fw-semibold">@((detail.Count * detail.Price).ToString("c"))</div>

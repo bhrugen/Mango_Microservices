@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="col-9 col-md-4">
                                         <div class="menu-card-category mb-0">@cartObj.Product.CategoryName</div>
-                                        <h6 style="font-family:Georgia,serif;font-weight:700;color:var(--charcoal);margin-bottom:.25rem;">
+                                        <h6 style="font-family:Georgia,serif;font-weight:700;margin-bottom:.25rem;">
                                             @cartObj.Product.Name
                                         </h6>
                                         <form asp-action="Remove" method="post" class="d-inline">
@@ -128,8 +128,7 @@
                     }
                     else
                     {
-                        <div class="d-flex align-items-center justify-content-between px-3 py-2"
-                             style="background:rgba(46,125,50,.07);border:1.5px solid rgba(46,125,50,.2);border-radius:var(--radius-md);">
+                        <div class="d-flex align-items-center justify-content-between px-3 py-2 rounded border border-success border-opacity-25 bg-success bg-opacity-10">
                             <span class="small fw-semibold" style="color:var(--restaurant-green);">
                                 <i class="bi bi-check-circle-fill me-1"></i>
                                 <strong>@Model.CartHeader.CouponCode</strong> applied!

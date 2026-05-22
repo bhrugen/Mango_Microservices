@@ -35,8 +35,8 @@ function loadDataTable(status) {
                 data: 'orderHeaderId',
                 "render": function (data) {
                     return `<div class="w-75 btn-group" role="group">
-                    <a href="/order/orderDetail?orderId=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
-                    </div>`
+                        <a href="/order/orderDetail?orderId=${data}" class="btn btn-sm" style="background:var(--brand-primary);color:#fff;border:none;"><i class="bi bi-pencil-square"></i></a>
+                        </div>`
                 },
                 "width": "10%"
             }

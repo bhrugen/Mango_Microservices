@@ -1,10 +1,12 @@
 @using Mango.Web.Utility
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Mango Restaurant</title>
+    <!-- Apply saved theme before any rendering to prevent flash -->
+    <script>document.getElementById('htmlRoot').setAttribute('data-bs-theme', localStorage.getItem('theme') || 'light');</script>
 
     <!-- Bootstrap 5.3.8 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -91,6 +93,13 @@
                                 <i class="bi bi-bag"></i>
                                 <span class="d-none d-sm-inline" style="font-size:.85rem; font-weight:500;">Cart</span>
                             </a>
+                        </li>
+
+                        <!-- Theme Toggle -->
+                        <li class="nav-item">
+                            <button id="themeToggle" class="btn btn-outline-light btn-sm" title="Toggle dark/light mode">
+                                <i id="themeIcon" class="bi bi-moon-stars-fill"></i>
+                            </button>
                         </li>
 
                         @if (!User.Identity.IsAuthenticated)
@@ -228,6 +237,33 @@
     <script src="https://cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            const html = document.getElementById('htmlRoot');
+            const btn  = document.getElementById('themeToggle');
+            const icon = document.getElementById('themeIcon');
+
+            function applyTheme(theme) {
+                html.setAttribute('data-bs-theme', theme);
+                localStorage.setItem('theme', theme);
+                if (theme === 'dark') {
+                    icon.className = 'bi bi-sun-fill';
+                    btn.title = 'Switch to light mode';
+                } else {
+                    icon.className = 'bi bi-moon-stars-fill';
+                    btn.title = 'Switch to dark mode';
+                }
+            }
+
+            // Sync icon with current theme on load
+            applyTheme(html.getAttribute('data-bs-theme') || 'light');
+
+            btn.addEventListener('click', function () {
+                const current = html.getAttribute('data-bs-theme');
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            });
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
     <partial name="_Notifications" />
 </body>
