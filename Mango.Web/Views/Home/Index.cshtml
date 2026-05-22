@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<ProductDto>
 
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
     ViewData["Title"] = "Our Menu";
+    var token = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 
 <!-- ===== HERO ===== -->
@@ -64,13 +66,11 @@
                                title="View Details">
                                 <i class="bi bi-eye"></i>
                             </a>
-                            <form asp-action="ProductDetails" method="post" class="flex-grow-1">
-                                <input type="hidden" name="ProductId" value="@product.ProductId" />
-                                <input type="hidden" name="Count" value="1" />
-                                <button type="submit" class="btn btn-gold w-100">
-                                    <i class="bi bi-bag-plus me-1"></i>Add to Cart
-                                </button>
-                            </form>
+                            <button type="button"
+                                    class="btn btn-gold w-100 btn-add-to-cart"
+                                    data-product-id="@product.ProductId">
+                                <i class="bi bi-bag-plus me-1"></i>Add to Cart
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -131,9 +131,57 @@ else
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Stagger fade-in animations
             document.querySelectorAll('.fade-in-up').forEach((el, i) => {
                 el.style.animationDelay = `${i * 80}ms`;
             });
+
+            // Add to Cart — no page reload
+                document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
+                    btn.addEventListener('click', async function () {
+                        const productId = this.dataset.productId;
+                        const icon = this.querySelector('i');
+                        const originalHtml = this.innerHTML;
+
+                        this.disabled = true;
+                        this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Adding…';
+
+                        try {
+                            const response = await fetch('@Url.Action("AddToCart", "Home")', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'RequestVerificationToken': '@token'
+                                },
+                                body: JSON.stringify({ productId: parseInt(productId) })
+                            });
+
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                                return;
+                            }
+
+                            const data = await response.json();
+                            if (data.success) {
+                                toastr.success(data.message);
+                                // Show tick briefly
+                                this.innerHTML = '<i class="bi bi-check-lg me-1"></i>Added!';
+                                setTimeout(() => {
+                                    this.innerHTML = originalHtml;
+                                    this.disabled = false;
+                                }, 1200);
+                            } else {
+                                toastr.error(data.message);
+                                this.innerHTML = originalHtml;
+                                this.disabled = false;
+                            }
+                        } catch (e) {
+                            toastr.error('Something went wrong. Please try again.');
+                            this.innerHTML = originalHtml;
+                            this.disabled = false;
+                        }
+                    });
+                });
         });
     </script>
 }

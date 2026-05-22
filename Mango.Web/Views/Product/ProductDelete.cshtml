@@ -1,60 +1,64 @@
 ﻿@model ProductDto
 
-<form asp-action="ProductDelete">
-    <br />
-    <div class="container border p-3">
-        <h1 class="text-white text-center">Delete Product</h1>
-        <input hidden asp-for="ProductId" />
-        <hr />
-        <div class="row">
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;"> Name</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Name" disabled class="form-control" />
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">Category Name</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="CategoryName" disabled class="form-control" />
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">Description</label>
-            </div>
-            <div class="col-10 pb-3">
-                <textarea asp-for="Description" disabled class="form-control" rows="5" ></textarea>
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">Price</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Price" disabled class="form-control" />
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">ImageUrl</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="ImageUrl" disabled class="form-control" />
-            </div>
+@{
+    ViewData["Title"] = "Delete Dish";
+}
 
-            <div class="col-5 offset-2">
+<div class="fade-in-up" style="max-width:560px;margin:0 auto;">
 
-                <a asp-action="ProductIndex" class="btn-primary btn form-control ">Back to List</a>
-            </div>
-            <div class="col-5">
-                <input type="submit" value="Delete" class="btn btn-danger form-control" />
-
-            </div>
-
-        </div>
-
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
+            <div class="section-label"><span>Admin</span></div>
+            <h2 class="section-title mb-0">Delete Dish</h2>
+        </div>
+        <a asp-action="ProductIndex" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark-restaurant">
+            <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                <i class="bi bi-trash me-2"></i>Confirm Delete
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="trust-badge mb-4" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);">
+                <i class="bi bi-exclamation-triangle-fill" style="color:#ef4444;font-size:1.25rem;"></i>
+                <div>
+                    <div class="fw-semibold" style="font-size:.875rem;color:#ef4444;">This action cannot be undone.</div>
+                    <div class="text-muted" style="font-size:.8rem;">The dish will be permanently removed from the menu.</div>
+                </div>
+            </div>
+
+            <form asp-action="ProductDelete" method="post">
+                <input asp-for="ProductId" type="hidden" />
+                <div class="mb-3">
+                    <label class="form-label">Dish Name</label>
+                    <input asp-for="Name" disabled class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <input asp-for="CategoryName" disabled class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input asp-for="Price" disabled class="form-control" />
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Description</label>
+                    <textarea asp-for="Description" disabled class="form-control" rows="3"></textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete Dish
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</form>
 
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+</div>

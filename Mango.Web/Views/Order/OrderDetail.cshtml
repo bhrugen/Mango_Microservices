@@ -1,9 +1,10 @@
-﻿@model OrderHeaderDto
+@model OrderHeaderDto
 @using Mango.Web.Utility
+
 <form method="post">
     <input asp-for="OrderHeaderId" hidden />
 
-    <!-- Header -->
+    <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
         <div>
             <div class="section-label"><span>Order #@Model.OrderHeaderId</span></div>
@@ -14,100 +15,123 @@
         </a>
     </div>
 
-    <div class="card fade-in-up">
-            <div class="card-header bg-dark-restaurant">
-                <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);"><i class="bi bi-receipt me-2"></i>Order Summary</span>
-            </div>
-            <div class="card-body">
-                <div class="row g-4">
-                    <div class="col-lg-6">
-                        <h6 style="font-family:Georgia,serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:.8rem;color:var(--brand-primary);margin-bottom:1rem;">Contact Info</h6>
-                        <div class="row g-2">
-                            <div class="col-12">
-                                <label class="form-label">Name</label>
-                                <input asp-for="Name" readonly class="form-control" />
+    <div class="row g-4">
+
+        <!-- LEFT: Contact info -->
+        <div class="col-lg-7">
+            <div class="card fade-in-up h-100">
+                <div class="card-header">
+                    <span style="font-family:Georgia,serif;font-weight:700;font-size:1rem;color:var(--charcoal);">
+                        <i class="bi bi-person-lines-fill me-2" style="color:var(--brand-primary);"></i>Contact Information
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Full Name</label>
+                            <input asp-for="Name" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Phone</label>
+                            <input asp-for="Phone" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Email</label>
+                            <input asp-for="Email" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Order Date</label>
+                            <input value="@Model.OrderTime.ToString("dd MMM yyyy, h:mm tt")" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Status</label>
+                            <div class="mt-1">
+                                @{
+                                    var statusClass = Model.Status switch {
+                                        "Approved"        => "bg-success",
+                                        "ReadyForPickup"  => "bg-warning text-dark",
+                                        "Completed"       => "bg-primary",
+                                        "Cancelled"       => "bg-danger",
+                                        _                 => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @statusClass px-3 py-2" style="font-size:.85rem;">@Model.Status</span>
                             </div>
-                           
-                            <div class="row my-1">
-                                <div class="col-sm-6">
-                                    <label class="form-label">Phone</label>
-                                    <input asp-for="Phone" readonly class="form-control" />
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label">Email</label>
-                                    <input asp-for="Email" readonly class="form-control" />
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label">Order Date</label>
-                                    <input value="@Model.OrderTime.ToShortDateString()" readonly class="form-control" />
-                                </div>
+                        </div>
+                        @if (User.IsInRole(SD.RoleAdmin))
+                        {
+                            <div class="col-12">
+                                <label class="form-label text-muted small">Stripe Session ID</label>
+                                <input asp-for="StripeSessionId" readonly class="form-control form-control-sm font-monospace" />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-muted small">Payment Intent ID</label>
+                                <input asp-for="PaymentIntentId" readonly class="form-control form-control-sm font-monospace" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                                    @if (User.IsInRole(SD.RoleAdmin))
-                                                    {
-                                                        <div class="col-12">
-                                                            <label class="form-label">Stripe Session ID</label>
-                                                            <input asp-for="StripeSessionId" readonly class="form-control" />
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <label class="form-label">Payment Intent ID</label>
-                                                            <input asp-for="PaymentIntentId" readonly class="form-control" />
-                                                        </div>
-                                                    }
-                                                    <div class="col-12">
-                                                        <label class="form-label">Status</label>
-                                                        <input asp-for="Status" readonly class="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
+        <!-- RIGHT: Items + Total + Actions -->
+        <div class="col-lg-5">
+            <div class="card fade-in-up">
+                <div class="card-header bg-dark-restaurant">
+                    <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                        <i class="bi bi-receipt me-2"></i>Order Summary
+                    </span>
+                </div>
+                <div class="card-body">
 
-                                            <!-- Items & Actions -->
-                                            <div class="col-lg-6">
-                                                <h6 style="font-family:Georgia,serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:.8rem;color:var(--brand-primary);margin-bottom:1rem;">Items Ordered</h6>
+                    @foreach (var detail in Model.OrderDetails)
+                    {
+                        <div class="d-flex align-items-center justify-content-between gap-3 mb-3 p-3"
+                             style="background:var(--restaurant-cream);border-radius:var(--radius-md);border:1px solid var(--border-warm);">
+                            <div>
+                                <div style="font-family:Georgia,serif;font-weight:700;font-size:.9rem;color:var(--charcoal);">@detail.ProductName</div>
+                                <div class="text-muted" style="font-size:.8rem;">x @detail.Count &middot; @detail.Price.ToString("c") each</div>
+                            </div>
+                            <div class="price-tag-sm fw-semibold">@((detail.Count * detail.Price).ToString("c"))</div>
+                        </div>
+                    }
 
-                                                @foreach(var detail in Model.OrderDetails){
-                                                <div class="d-flex align-items-center gap-3 mb-3 p-3"
-                                                     style="background:var(--restaurant-cream);border-radius:var(--radius-lg);border:1px solid var(--border-warm);">
-                                                    <div class="flex-grow-1">
-                                                        <div style="font-family:Georgia,serif;font-weight:700;font-size:.95rem;color:var(--charcoal);">@detail.ProductName</div>
-                                                        <div class="text-muted small">x @detail.Count &middot; @detail.Price.ToString("c") each</div>
-                                                    </div>
-                                                    <div class="price-tag-sm">@((detail.Count * detail.Price).ToString("c"))</div>
-                                                </div>
-                                                }
+                    <div class="divider-ornament my-3"><span>+</span></div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span style="font-family:Georgia,serif;font-weight:700;font-size:1.1rem;">Total</span>
+                        <span class="price-tag">@Model.OrderTotal.ToString("c")</span>
+                    </div>
 
-                                                <div class="divider-ornament my-3"><span>+</span></div>
-                                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                                    <span style="font-family:Georgia,serif;font-weight:700;font-size:1.1rem;">Total</span>
-                                                    <span class="price-tag">@Model.OrderTotal.ToString("c")</span>
-                                                </div>
+                    @if (User.IsInRole(SD.RoleAdmin))
+                    {
+                        <div class="d-grid gap-2">
+                            @if (Model.Status == SD.Status_Approved)
+                            {
+                                <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId"
+                                        type="submit" class="btn btn-success">
+                                    <i class="bi bi-bag-check me-2"></i>Ready for Pickup
+                                </button>
+                            }
+                            @if (Model.Status == SD.Status_ReadyForPickup)
+                            {
+                                <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId"
+                                        type="submit" class="btn btn-gold">
+                                    <i class="bi bi-check-circle me-2"></i>Complete Order
+                                </button>
+                            }
+                            @if (Model.Status == SD.Status_Approved || Model.Status == SD.Status_ReadyForPickup)
+                            {
+                                <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId"
+                                        type="submit" class="btn btn-outline-danger">
+                                    <i class="bi bi-x-circle me-2"></i>Cancel Order
+                                </button>
+                            }
+                        </div>
+                    }
 
-                                                @if (User.IsInRole(SD.RoleAdmin))
-                                                {
-                                                    <div class="d-grid gap-2">
-                                                        @if (Model.Status == SD.Status_Approved)
-                                                        {
-                                                            <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success">
-                                                                <i class="bi bi-bag-check me-2"></i>Ready for Pickup
-                                                            </button>
-                                                        }
-                                                        @if (Model.Status == SD.Status_ReadyForPickup)
-                                                        {
-                                                            <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-gold">
-                                                                <i class="bi bi-check-circle me-2"></i>Complete Order
-                                                            </button>
-                                                        }
-                                                        @if (Model.Status == SD.Status_Approved || Model.Status == SD.Status_ReadyForPickup)
-                                                        {
-                                                            <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger">
-                                                                <i class="bi bi-x-circle me-2"></i>Cancel Order
-                                                            </button>
-                                                        }
-                                                    </div>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                </div>
+            </div>
+        </div>
 
-
+    </div>
+</form>

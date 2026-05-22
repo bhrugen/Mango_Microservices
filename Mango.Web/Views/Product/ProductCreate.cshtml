@@ -1,66 +1,137 @@
 ﻿@model ProductDto
 
-<form asp-action="ProductCreate" enctype="multipart/form-data">
-    <br />
-    <div class="container border p-3">
-        <h1 class="text-white text-center">Create Product</h1>
+@{
+    ViewData["Title"] = "Add New Dish";
+}
 
-        <hr />
-        <div class="row">
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;"> Name</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">Category Name</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="CategoryName" class="form-control" />
-                <span asp-validation-for="CategoryName" class="text-danger"></span>
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">Description</label>
-            </div>
-            <div class="col-10 pb-3">
-                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">Price</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="col-2">
-                <label class="control-label pt-2" style="font-size:20px;">ImageUrl</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Image" class="form-control" />
-                <input asp-for="ImageUrl" hidden class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
+<div class="container py-4">
 
-            <div class="col-5 offset-2">
-
-                <a asp-action="ProductIndex" class="btn-primary btn form-control ">Back to List</a>
-            </div>
-            <div class="col-5">
-                <input type="submit" value="Create" class="btn btn-success form-control" />
-
-            </div>
-
-        </div>
-
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
         <div>
+            <div class="section-label"><span>Admin</span></div>
+            <h2 class="section-title mb-0">Add New Dish</h2>
         </div>
+        <a asp-action="ProductIndex" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Back
+        </a>
     </div>
-</form>
 
+    <div class="row g-4 align-items-start">
+
+        <!-- Form -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-pencil-square me-2"></i>Dish Details
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="ProductCreate" enctype="multipart/form-data">
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-semibold">Dish Name <span class="text-danger">*</span></label>
+                            <input asp-for="Name" class="form-control" id="nameInput"
+                                   placeholder="e.g. Mango Chicken Tikka" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="CategoryName" class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+                                <input asp-for="CategoryName" class="form-control" id="categoryInput"
+                                       placeholder="e.g. Main Course" />
+                                <span asp-validation-for="CategoryName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label fw-semibold">Price <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Price" class="form-control" id="priceInput" placeholder="0.00" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4"
+                                      placeholder="Describe the dish..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Image" class="form-label fw-semibold">Dish Photo</label>
+                            <input asp-for="Image" type="file" class="form-control" id="imageInput" accept="image/*" />
+                            <input asp-for="ImageUrl" type="hidden" />
+                            <span asp-validation-for="Image" class="text-danger small"></span>
+                            <div class="form-text">Accepted: JPG, PNG, WEBP.</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning fw-semibold px-4">
+                                <i class="bi bi-plus-circle me-1"></i>Publish Dish
+                            </button>
+                            <a asp-action="ProductIndex" class="btn btn-outline-secondary px-4">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Preview -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm sticky-top" style="top:80px">
+                <div class="card-header bg-secondary text-white">
+                    <i class="bi bi-eye me-2"></i>Live Preview
+                </div>
+                <div id="previewImgWrap" style="height:200px; overflow:hidden; background:#f8f9fa;
+                     display:flex; align-items:center; justify-content:center;">
+                    <i class="bi bi-camera text-secondary" style="font-size:3rem;"></i>
+                </div>
+                <div class="card-body">
+                    <span class="badge bg-warning text-dark mb-2" id="previewCategory">Category</span>
+                    <h5 class="card-title fw-bold" id="previewName">Dish Name</h5>
+                    <p class="fs-5 fw-bold text-warning mb-0" id="previewPrice">$0.00</p>
+                </div>
+                <div class="card-footer text-muted small">
+                    <i class="bi bi-info-circle me-1"></i>Updates as you type
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const nameInput     = document.getElementById('nameInput');
+        const categoryInput = document.getElementById('categoryInput');
+        const priceInput    = document.getElementById('priceInput');
+        const imageInput    = document.getElementById('imageInput');
+
+        nameInput?.addEventListener('input', () =>
+            document.getElementById('previewName').textContent = nameInput.value || 'Dish Name');
+
+        categoryInput?.addEventListener('input', () =>
+            document.getElementById('previewCategory').textContent = categoryInput.value || 'Category');
+
+        priceInput?.addEventListener('input', () =>
+            document.getElementById('previewPrice').textContent =
+                priceInput.value ? `$${parseFloat(priceInput.value).toFixed(2)}` : '$0.00');
+
+        imageInput?.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('previewImgWrap').innerHTML =
+                    `<img src="${e.target.result}" class="w-100" style="height:200px;object-fit:cover;" alt="preview">`;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+}
+
 }

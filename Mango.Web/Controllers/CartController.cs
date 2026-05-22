@@ -22,14 +22,10 @@ namespace Mango.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-            return View(await LoadCartDtoBasedOnLoggedInUser());
+            var cart = await LoadCartDtoBasedOnLoggedInUser();
+            return View(cart);
         }
 
-        [Authorize]
-        public async Task<IActionResult> Checkout()
-        {
-            return View(await LoadCartDtoBasedOnLoggedInUser());
-        }
         [HttpPost]
         [ActionName("Checkout")]
         public async Task<IActionResult> Checkout(CartDto cartDto)
@@ -52,7 +48,7 @@ namespace Mango.Web.Controllers
                 StripeRequestDto stripeRequestDto = new()
                 {
                     ApprovedUrl = domain + "cart/Confirmation?orderId=" + orderHeaderDto.OrderHeaderId,
-                    CancelUrl = domain + "cart/checkout",
+                    CancelUrl = domain + "cart/CartIndex",
                     OrderHeader = orderHeaderDto
                 };
 
@@ -94,6 +90,39 @@ namespace Mango.Web.Controllers
                 return RedirectToAction(nameof(CartIndex));
             }
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCount(int cartDetailsId, int change)
+        {
+            var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+
+            var cart = await LoadCartDtoBasedOnLoggedInUser();
+            var item = cart?.CartDetails?.FirstOrDefault(d => d.CartDetailsId == cartDetailsId);
+
+            if (item != null)
+            {
+                int newCount = item.Count + change;
+                if (newCount <= 0)
+                {
+                    await _cartService.RemoveFromCartAsync(cartDetailsId);
+                }
+                else
+                {
+                    CartDto cartDto = new()
+                    {
+                        CartHeader = new CartHeaderDto { UserId = userId },
+                        CartDetails = new List<CartDetailsDto>
+                        {
+                            new CartDetailsDto { ProductId = item.ProductId, Count = change }
+                        }
+                    };
+                    await _cartService.UpsertCartAsync(cartDto);
+                }
+
+                }
+
+                return RedirectToAction(nameof(CartIndex));
         }
 
         [HttpPost]

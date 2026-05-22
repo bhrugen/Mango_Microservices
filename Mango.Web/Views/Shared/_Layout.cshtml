@@ -13,8 +13,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-    <!-- DataTables with Bootstrap 5 -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css" />
 
     <!-- Restaurant Theme -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -31,7 +31,7 @@
 
                 <!-- Brand -->
                 <a class="navbar-brand-restaurant" asp-controller="Home" asp-action="Index">
-                    <div class="brand-icon">??</div>
+                    <div class="brand-icon">&#x1F96D;</div>
                     <div class="brand-text">
                         <span class="brand-name">Mango</span>
                         <span class="brand-tagline">Fine Dining</span>
@@ -89,7 +89,7 @@
                         <li class="nav-item">
                             <a class="cart-nav-btn" asp-controller="Cart" asp-action="CartIndex">
                                 <i class="bi bi-bag"></i>
-                                <span class="cart-badge">0</span>
+                                <span class="d-none d-sm-inline" style="font-size:.85rem; font-weight:500;">Cart</span>
                             </a>
                         </li>
 
@@ -102,7 +102,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-gold btn-sm" asp-controller="Auth" asp-action="Register">
-                                    <i class="bi bi-person-plus me-1"></i>Reserve
+                                    <i class="bi bi-person-plus me-1"></i>Sign Up
                                 </a>
                             </li>
                         }
@@ -119,17 +119,6 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-restaurant" aria-labelledby="userDropdown">
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-person text-warning"></i>My Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Order" asp-action="OrderIndex">
-                                            <i class="bi bi-receipt text-warning"></i>My Orders
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">
                                             <i class="bi bi-box-arrow-right" style="color:#ef4444;"></i>
@@ -236,8 +225,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

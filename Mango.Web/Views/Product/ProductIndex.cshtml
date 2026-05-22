@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<ProductDto>
 
+@{
+	ViewData["Title"] = "Menu Dishes";
+}
+
 <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
 	<div>
 		<div class="section-label"><span>Admin</span></div>
@@ -12,34 +16,33 @@
 
 <div class="card fade-in-up">
 	<div class="card-body p-0">
-		<table class="table" style="margin-bottom:0;">
-			<thead>
+		<table class="table mb-0">
+			<thead class="table-dark">
 				<tr>
 					<th>Name</th>
 					<th>Category</th>
-					<th>Price</th>											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-										@foreach (var item in Model)
-										{
-											<tr>
-												<td class="fw-semibold" style="font-family:Georgia,serif;">@item.Name</td>
-												<td><span class="menu-card-category">@item.CategoryName</span></td>
-												<td><span class="price-tag-sm">@item.Price.ToString("c")</span></td>
-												<td class="text-end">
-													<a class="btn btn-sm btn-charcoal me-1" asp-action="ProductEdit" asp-route-productId="@item.ProductId">
-														<i class="bi bi-pencil-square"></i>
-													</a>
-													<a class="btn btn-sm btn-danger" asp-action="ProductDelete" asp-route-productId="@item.ProductId">
-														<i class="bi bi-trash"></i>
-													</a>
-												</td>
-											</tr>
-										}
-									</tbody>
-								</table>
-							</div>
-						</div>
-
+					<th>Price</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td class="align-middle fw-semibold" style="font-family:Georgia,serif;">@item.Name</td>
+						<td class="align-middle"><span class="menu-card-category">@item.CategoryName</span></td>
+						<td class="align-middle"><span class="price-tag-sm">@item.Price.ToString("c")</span></td>
+						<td class="align-middle text-end">
+							<a class="btn btn-sm btn-outline-secondary me-1" asp-action="ProductEdit" asp-route-productId="@item.ProductId">
+								<i class="bi bi-pencil-square"></i>
+							</a>
+							<a class="btn btn-sm btn-outline-danger" asp-action="ProductDelete" asp-route-productId="@item.ProductId">
+								<i class="bi bi-trash"></i>
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </div>

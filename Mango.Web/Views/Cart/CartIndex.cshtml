@@ -1,20 +1,21 @@
-﻿@model CartDto
+@model CartDto
 
 @{
-    ViewData["Title"] = "Your Order";
+    ViewData["Title"] = "Cart & Checkout";
+    bool hasItems = Model.CartHeader != null && Model.CartDetails?.Count() > 0;
 }
 
-@if(Model.CartHeader!=null && Model.CartDetails?.Count()>0){
-<div class="py-2">
-    <form method="post" asp-action="EmailCart">
-        <input asp-for="CartHeader.UserId" hidden />
-        <input asp-for="CartHeader.CartHeaderId" hidden />
+@if (hasItems)
+{
+    <div class="py-2">
 
+        <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
             <div>
-                <div class="section-label"><span>Your Selection</span></div>
-                <h2 class="section-title mb-0">Your Order
-                    <span class="badge badge-gold ms-2" style="font-size:.9rem;vertical-align:middle;">
+                <div class="section-label"><span>Your Order</span></div>
+                <h2 class="section-title mb-0">
+                    Cart &amp; Checkout
+                    <span class="badge badge-gold ms-2" style="font-size:.85rem;vertical-align:middle;">
                         @Model.CartDetails.Count() @(Model.CartDetails.Count() == 1 ? "dish" : "dishes")
                     </span>
                 </h2>
@@ -25,160 +26,218 @@
         </div>
 
         <div class="row g-4">
+
+            <!-- LEFT: Cart items + Contact details -->
             <div class="col-lg-8">
-                <div class="card fade-in-up">
-                    <div class="card-header">
-                        <span style="font-family:Georgia,serif;font-weight:700;font-size:1rem;color:var(--charcoal);">
-                            <i class="bi bi-basket3 me-2" style="color:var(--brand-primary);"></i>Order Items
+
+                <!-- Order Items card -->
+                <div class="card fade-in-up mb-4">
+                    <div class="card-header bg-dark-restaurant d-flex justify-content-between align-items-center">
+                        <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                            <i class="bi bi-basket3 me-2"></i>Order Items
                         </span>
+                        <div class="text-end">
+                            @if (Model.CartHeader.Discount > 0)
+                            {
+                                <div style="font-size:.75rem;color:rgba(255,255,255,.5);text-decoration:line-through;">
+                                    @string.Format("{0:c}", Model.CartHeader.CartTotal + Model.CartHeader.Discount)
+                                </div>
+                                <div style="font-size:.7rem;color:#6ee7b7;">
+                                    <i class="bi bi-ticket-perforated me-1"></i>-@string.Format("{0:c}", Model.CartHeader.Discount) saved
+                                </div>
+                            }
+                            <div style="font-family:Georgia,serif;font-weight:700;color:var(--brand-primary);font-size:1.2rem;">
+                                @string.Format("{0:c}", Model.CartHeader.CartTotal)
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body p-0">
-                        @foreach(var cartObj in Model.CartDetails){
-                        <div class="cart-item">
-                            <div class="row align-items-center g-3">
-                                <div class="col-3 col-md-2">
-                                    <img src="@cartObj.Product.ImageUrl" alt="@cartObj.Product.Name"
-                                         style="width:75px;height:75px;object-fit:cover;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);" />
-                                </div>
-                                <div class="col-9 col-md-4">
-                                    <div class="menu-card-category mb-0">@cartObj.Product.CategoryName</div>
-                                    <h6 style="font-family:Georgia,serif;font-weight:700;color:var(--charcoal);margin-bottom:.25rem;">
-                                        @cartObj.Product.Name
-                                    </h6>
-                                    <button type="button" class="btn btn-link p-0 text-danger"
-                                            style="font-size:.8rem;text-decoration:none;"
-                                            onclick="location.href='@Url.Action("Remove", new { cartDetailsId = cartObj.CartDetailsId })'">
-                                        <i class="bi bi-x-circle me-1"></i>Remove
-                                    </button>
-                                </div>
-                                <div class="col-4 col-md-2 text-center">
-                                    <div class="text-muted small mb-1">Unit Price</div>
-                                    <div class="fw-semibold">@string.Format("{0:c}", cartObj.Product.Price)</div>
-                                </div>
-                                <div class="col-4 col-md-2 text-center">
-                                    <div class="text-muted small mb-1">Qty</div>
-                                    <span class="badge" style="background:var(--restaurant-cream);color:var(--charcoal);border:1.5px solid var(--border-warm);font-size:.9rem;padding:.4rem .8rem;">
-                                        x @cartObj.Count
-                                    </span>
-                                </div>
-                                <div class="col-4 col-md-2 text-end">
-                                    <div class="text-muted small mb-1">Subtotal</div>
-                                    <div class="price-tag-sm">
-                                        @string.Format("{0:c}", cartObj.Product.Price * cartObj.Count)
+                        @foreach (var cartObj in Model.CartDetails)
+                        {
+                            <div class="cart-item">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-3 col-md-2">
+                                        <img src="@cartObj.Product.ImageUrl" alt="@cartObj.Product.Name"
+                                             style="width:75px;height:75px;object-fit:cover;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);" />
+                                    </div>
+                                    <div class="col-9 col-md-4">
+                                        <div class="menu-card-category mb-0">@cartObj.Product.CategoryName</div>
+                                        <h6 style="font-family:Georgia,serif;font-weight:700;color:var(--charcoal);margin-bottom:.25rem;">
+                                            @cartObj.Product.Name
+                                        </h6>
+                                        <form asp-action="Remove" method="post" class="d-inline">
+                                            <input type="hidden" name="cartDetailsId" value="@cartObj.CartDetailsId" />
+                                            <button type="submit" class="btn btn-link p-0 text-danger"
+                                                    style="font-size:.8rem;text-decoration:none;">
+                                                <i class="bi bi-x-circle me-1"></i>Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-4 col-md-2 text-center">
+                                        <div class="text-muted small mb-1">Unit Price</div>
+                                        <div class="fw-semibold">@string.Format("{0:c}", cartObj.Product.Price)</div>
+                                    </div>
+                                    <div class="col-4 col-md-2 text-center">
+                                        <div class="text-muted small mb-1">Qty</div>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <form asp-action="UpdateCount" method="post" class="d-inline">
+                                                <input type="hidden" name="cartDetailsId" value="@cartObj.CartDetailsId" />
+                                                <input type="hidden" name="change" value="-1" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0"
+                                                        style="line-height:1.4;">&#8722;</button>
+                                            </form>
+                                            <span class="fw-semibold px-1">@cartObj.Count</span>
+                                            <form asp-action="UpdateCount" method="post" class="d-inline">
+                                                <input type="hidden" name="cartDetailsId" value="@cartObj.CartDetailsId" />
+                                                <input type="hidden" name="change" value="1" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0"
+                                                        style="line-height:1.4;">+</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-2 text-end">
+                                        <div class="text-muted small mb-1">Subtotal</div>
+                                        <div class="price-tag-sm">
+                                            @string.Format("{0:c}", cartObj.Product.Price * cartObj.Count)
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         }
                     </div>
                 </div>
+
+                <!-- Promo Code — inline strip -->
+                <div class="fade-in-up px-1">
+                    @if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
+                    {
+                        <form asp-action="ApplyCoupon" method="post">
+                            <input asp-for="CartHeader.UserId" type="hidden" />
+                            <input asp-for="CartHeader.CartHeaderId" type="hidden" />
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-transparent border-end-0"
+                                      style="border-color:var(--border-warm);">
+                                    <i class="bi bi-ticket-perforated" style="color:var(--brand-primary);"></i>
+                                </span>
+                                <input asp-for="CartHeader.CouponCode" class="form-control border-start-0"
+                                       placeholder="Promo code"
+                                       style="border-color:var(--border-warm);font-size:.85rem;" />
+                                <button type="submit" class="btn btn-gold btn-sm px-3">Apply</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center justify-content-between px-3 py-2"
+                             style="background:rgba(46,125,50,.07);border:1.5px solid rgba(46,125,50,.2);border-radius:var(--radius-md);">
+                            <span class="small fw-semibold" style="color:var(--restaurant-green);">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                <strong>@Model.CartHeader.CouponCode</strong> applied!
+                            </span>
+                            <form asp-action="RemoveCoupon" method="post" class="d-inline ms-2">
+                                <input asp-for="CartHeader.UserId" type="hidden" />
+                                <input asp-for="CartHeader.CartHeaderId" type="hidden" />
+                                <input asp-for="CartHeader.CouponCode" type="hidden" />
+                                <button type="submit" class="btn btn-sm btn-link text-danger p-0" style="text-decoration:none;">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+
             </div>
 
+            <!-- RIGHT: Contact Details + Summary -->
             <div class="col-lg-4">
                 <div style="position:sticky;top:20px;">
+
+                    <!-- Contact Details -->
                     <div class="card mb-3 fade-in-up">
                         <div class="card-header">
-                            <span style="font-family:Georgia,serif;font-weight:700;font-size:.95rem;">
-                                <i class="bi bi-ticket-perforated me-2" style="color:var(--brand-primary);"></i>Promo Code
+                            <span style="font-family:Georgia,serif;font-weight:700;font-size:1rem;color:var(--charcoal);">
+                                <i class="bi bi-person-lines-fill me-2" style="color:var(--brand-primary);"></i>Contact Details
                             </span>
                         </div>
                         <div class="card-body">
-                            @if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
-                            {
-                                <div class="input-group">
-                                    <input asp-for="CartHeader.CouponCode" class="form-control"
-                                           placeholder="Enter promo code" style="font-size:.9rem;" />
-                                    <button type="submit" asp-action="ApplyCoupon" class="btn btn-gold px-3">Apply</button>
+                            <form asp-action="Checkout" method="post" id="checkoutForm">
+                                <input asp-for="CartHeader.UserId" type="hidden" />
+                                <input asp-for="CartHeader.CartHeaderId" type="hidden" />
+                                <input asp-for="CartHeader.CouponCode" type="hidden" />
+                                <input asp-for="CartHeader.Discount" type="hidden" />
+                                <input asp-for="CartHeader.CartTotal" type="hidden" />
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-person me-1 text-gold"></i>Full Name</label>
+                                    <input asp-for="CartHeader.Name" class="form-control" placeholder="Your full name" />
+                                    <span asp-validation-for="CartHeader.Name" class="text-danger small"></span>
                                 </div>
-                            }
-                            else
-                            {
-                                <div class="d-flex align-items-center justify-content-between p-2"
-                                     style="background:rgba(46,125,50,.08);border:1.5px solid rgba(46,125,50,.2);border-radius:var(--radius-md);">
-                                    <span class="small fw-semibold" style="color:var(--restaurant-green);">
-                                        <i class="bi bi-check-circle-fill me-1"></i>
-                                        <strong>@Model.CartHeader.CouponCode</strong> applied!
-                                    </span>
-                                    <button type="submit" asp-action="RemoveCoupon"
-                                            class="btn btn-sm btn-link text-danger p-0" style="font-size:.8rem;text-decoration:none;">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-envelope me-1 text-gold"></i>Email</label>
+                                    <input asp-for="CartHeader.Email" class="form-control" placeholder="you@example.com" />
+                                    <span asp-validation-for="CartHeader.Email" class="text-danger small"></span>
                                 </div>
-                            }
+                                <div class="mb-0">
+                                    <label class="form-label"><i class="bi bi-telephone me-1 text-gold"></i>Phone</label>
+                                    <input asp-for="CartHeader.Phone" class="form-control" placeholder="+1 555 000 0000" />
+                                    <span asp-validation-for="CartHeader.Phone" class="text-danger small"></span>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
-                    <div class="card fade-in-up">
-                        <div class="card-header bg-dark-restaurant">
-                            <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
-                                <i class="bi bi-receipt me-2"></i>Order Summary
-                            </span>
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 fade-in-up">
+                        <button type="submit" form="checkoutForm" class="btn btn-gold btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Confirm Order &mdash; @string.Format("{0:c}", Model.CartHeader.CartTotal)
+                        </button>
+                        <form asp-action="EmailCart" method="post">
+                            <input asp-for="CartHeader.UserId" type="hidden" />
+                            <input asp-for="CartHeader.CartHeaderId" type="hidden" />
+                            <button type="submit" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-envelope me-2"></i>Email Order
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Trust badges -->
+                    <div class="d-flex justify-content-center gap-3 mt-4 pt-3"
+                         style="border-top:1px solid var(--border-warm);">
+                        <div class="text-center">
+                            <i class="bi bi-shield-lock-fill d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
+                            <span class="text-muted" style="font-size:.7rem;">Secure</span>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="text-muted">Subtotal</span>
-                                <span class="fw-semibold">
-                                    @string.Format("{0:c}", Model.CartHeader.CartTotal + Model.CartHeader.Discount)
-                                </span>
-                            </div>
-                            @if (Model.CartHeader.Discount > 0)
-                            {
-                                <div class="d-flex justify-content-between mb-3" style="color:var(--restaurant-green);">
-                                    <span><i class="bi bi-ticket-perforated me-1"></i>Promo Discount</span>
-                                    <span class="fw-semibold">-@string.Format("{0:c}", Model.CartHeader.Discount)</span>
-                                </div>
-                            }
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="text-muted">Delivery</span>
-                                <span class="fw-semibold" style="color:var(--restaurant-green);">FREE</span>
-                            </div>
-                            <div class="divider-ornament my-3"><span>+</span></div>
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <span style="font-family:Georgia,serif;font-weight:700;font-size:1.1rem;">Total</span>
-                                <span class="price-tag">@string.Format("{0:c}", Model.CartHeader.CartTotal)</span>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <a asp-action="Checkout" class="btn btn-gold btn-lg">
-                                    <i class="bi bi-credit-card me-2"></i>Place Order
-                                </a>
-                                <button type="submit" class="btn btn-outline-secondary">
-                                    <i class="bi bi-envelope me-2"></i>Email Order
-                                </button>
-                            </div>
-                            <div class="d-flex justify-content-center gap-3 mt-4 pt-3"
-                                 style="border-top:1px solid var(--border-warm);">
-                                <div class="text-center">
-                                    <i class="bi bi-shield-lock-fill d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
-                                    <span class="text-muted" style="font-size:.7rem;">Secure</span>
-                                </div>
-                                <div class="text-center">
-                                    <i class="bi bi-truck d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
-                                    <span class="text-muted" style="font-size:.7rem;">Fast Delivery</span>
-                                </div>
-                                <div class="text-center">
-                                    <i class="bi bi-award-fill d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
-                                    <span class="text-muted" style="font-size:.7rem;">Quality</span>
-                                </div>
-                            </div>
+                        <div class="text-center">
+                            <i class="bi bi-truck d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
+                            <span class="text-muted" style="font-size:.7rem;">Fast Delivery</span>
+                        </div>
+                        <div class="text-center">
+                            <i class="bi bi-award-fill d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
+                            <span class="text-muted" style="font-size:.7rem;">Quality</span>
                         </div>
                     </div>
+
                 </div>
             </div>
-        </div>
-    </form>
-</div>
-}
-else {
-<div class="text-center py-5 fade-in-up">
-    <div class="card mx-auto border-0" style="max-width:420px;background:transparent;">
-        <div class="card-body py-5">
-            <div style="font-size:4rem;margin-bottom:1rem;">&#127869;</div>
-            <h3 style="font-family:Georgia,serif;font-weight:700;">Your Order is Empty</h3>
-            <p class="text-muted mb-4">Browse our menu and add your favourite dishes to get started.</p>
-            <a asp-controller="Home" asp-action="Index" class="btn btn-gold btn-lg px-5">
-                <i class="bi bi-grid me-2"></i>View Menu
-            </a>
+
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="text-center py-5 fade-in-up">
+        <div class="card mx-auto border-0" style="max-width:420px;background:transparent;">
+            <div class="card-body py-5">
+                <div style="font-size:4rem;margin-bottom:1rem;">&#127869;</div>
+                <h3 style="font-family:Georgia,serif;font-weight:700;">Your Order is Empty</h3>
+                <p class="text-muted mb-4">Browse our menu and add your favourite dishes to get started.</p>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-gold btn-lg px-5">
+                    <i class="bi bi-grid me-2"></i>View Menu
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

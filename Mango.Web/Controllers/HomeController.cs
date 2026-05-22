@@ -101,6 +101,33 @@ namespace Mango.Web.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartDto request)
+        {
+            CartDto cartDto = new CartDto()
+            {
+                CartHeader = new CartHeaderDto
+                {
+                    UserId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value
+                },
+                CartDetails = new List<CartDetailsDto>
+                {
+                    new CartDetailsDto { ProductId = request.ProductId, Count = 1 }
+                }
+            };
+
+            ResponseDto? response = await _cartService.UpsertCartAsync(cartDto);
+
+            if (response != null && response.IsSuccess)
+            {
+                return Json(new { success = true, message = "Item added to cart!" });
+            }
+
+            return Json(new { success = false, message = response?.Message ?? "Could not add item." });
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

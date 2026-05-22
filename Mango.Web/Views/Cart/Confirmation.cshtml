@@ -1,7 +1,57 @@
-﻿@model int
-<div class="text-center">
-    <h1 class="text-info pt-4">Congratulations! You are one step closer to amazing food.</h1>
-    <p class="pb-3">We have received your order and will be ready in 30minutes during regular business hours!</p>
-    <h4 class="text-warning pb-3">Order ID - @Model</h4>
-    <img src="/images/order.PNG" width="80%" />
+@model int
+
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="text-center py-5 fade-in-up">
+
+    <!-- Success Icon -->
+    <div class="mb-4" style="font-size:4.5rem;line-height:1;">
+        &#127869;
+    </div>
+
+    <!-- Heading -->
+    <h1 style="font-family:Georgia,serif;font-weight:700;color:var(--charcoal);font-size:2rem;" class="mb-2">
+        Order Confirmed!
+    </h1>
+    <p class="text-muted mb-4" style="font-size:1.05rem;max-width:480px;margin:0 auto;">
+        Thank you! We have received your order and it will be ready in approximately
+        <strong>30 minutes</strong> during regular business hours.
+    </p>
+
+    <!-- Order ID card -->
+    <div class="card mx-auto mb-5 border-0 fade-in-up"
+         style="max-width:340px;background:var(--restaurant-cream);border:1.5px solid var(--border-warm) !important;border-radius:var(--radius-lg);">
+        <div class="card-body py-4">
+            <div class="text-muted small mb-1" style="text-transform:uppercase;letter-spacing:1px;font-size:.75rem;">
+                <i class="bi bi-receipt me-1"></i>Order ID
+            </div>
+            <div style="font-family:Georgia,serif;font-size:1.75rem;font-weight:700;color:var(--brand-primary);">
+                #@Model
+            </div>
+        </div>
+    </div>
+
+    <!-- Trust badges -->
+    <div class="d-flex justify-content-center gap-4 mb-5">
+        <div class="text-center">
+            <i class="bi bi-clock-fill d-block mb-1" style="font-size:1.5rem;color:var(--brand-primary);"></i>
+            <span class="text-muted" style="font-size:.8rem;">~30 min</span>
+        </div>
+        <div class="text-center">
+            <i class="bi bi-shield-check d-block mb-1" style="font-size:1.5rem;color:var(--brand-primary);"></i>
+            <span class="text-muted" style="font-size:.8rem;">Secure Payment</span>
+        </div>
+        <div class="text-center">
+            <i class="bi bi-award-fill d-block mb-1" style="font-size:1.5rem;color:var(--brand-primary);"></i>
+            <span class="text-muted" style="font-size:.8rem;">Fresh Quality</span>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <a asp-controller="Home" asp-action="Index" class="btn btn-gold btn-lg px-5">
+        <i class="bi bi-grid me-2"></i>Back to Menu
+    </a>
+
 </div>

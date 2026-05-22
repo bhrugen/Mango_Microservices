@@ -96,20 +96,13 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 }
 
 .navbar-brand-restaurant .brand-icon {
-    width: 42px;
-    height: 42px;
-    background: var(--gradient-gold);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    box-shadow: var(--shadow-gold);
+    font-size: 1.8rem;
+    line-height: 1;
     transition: transform var(--ease-base);
 }
 
 .navbar-brand-restaurant:hover .brand-icon {
-    transform: rotate(-5deg) scale(1.05);
+    transform: scale(1.1);
 }
 
 .navbar-brand-restaurant .brand-text {
@@ -192,18 +185,18 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 /* Cart icon */
 .cart-nav-btn {
     position: relative;
-    width: 42px;
-    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.85rem;
     background: rgba(200, 145, 58, 0.12);
     border: 1px solid rgba(200, 145, 58, 0.25);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 50px;
     color: var(--brand-light) !important;
-    font-size: 1.1rem;
+    font-size: 1rem;
     text-decoration: none;
     transition: all var(--ease-base);
+    white-space: nowrap;
 }
 
 .cart-nav-btn:hover {
@@ -215,20 +208,18 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 }
 
 .cart-nav-btn .cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
     background: var(--restaurant-red);
     color: white;
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--charcoal);
+    padding: 0 5px;
+    line-height: 1;
 }
 
 /* User avatar */
@@ -484,6 +475,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
     font-weight: 700;
     letter-spacing: 0.5px;
     box-shadow: var(--shadow-md);
+    white-space: nowrap;
 }
 
 .menu-card-price-overlay {
@@ -662,7 +654,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
     border: 2px solid var(--border-warm);
     border-radius: var(--radius-md);
     padding: 0.75rem 1rem;
-    background: var(--surface);
+    background-color: var(--surface);
     color: var(--charcoal);
     font-size: 0.9375rem;
     transition: all var(--ease-base);
@@ -677,7 +669,7 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 .form-select:focus {
     border-color: var(--brand-primary);
     box-shadow: 0 0 0 4px rgba(200, 145, 58, 0.12);
-    background: var(--surface);
+    background-color: var(--surface);
     outline: none;
 }
 

@@ -16,10 +16,10 @@ namespace Mango.Web.Controllers
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(IAuthService authService, ITokenProvider  tokenProvider)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
         {
             _authService = authService;
-            _tokenProvider = tokenProvider; 
+            _tokenProvider = tokenProvider;
         }
 
         [HttpGet]
@@ -103,7 +103,8 @@ namespace Mango.Web.Controllers
         {
             await HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
-            return RedirectToAction("Index","Home");
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
 
 

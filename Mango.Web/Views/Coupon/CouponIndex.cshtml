@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<CouponDto>
 
+@{
+	ViewData["Title"] = "Promo Codes";
+}
+
 <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
 	<div>
 		<div class="section-label"><span>Admin</span></div>
@@ -12,36 +16,37 @@
 
 <div class="card fade-in-up">
 	<div class="card-body p-0">
-		<table class="table" style="margin-bottom:0;">
-			<thead>
+		<table class="table mb-0">
+			<thead class="table-dark">
 				<tr>
 					<th>Coupon Code</th>
 					<th>Discount</th>
-					<th>Min. Amount											</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-										@foreach(var item in Model)
-										{
-											<tr>
-												<td>
-													<span class="badge badge-gold" style="font-size:.9rem;padding:.4rem .85rem;">
-														<i class="bi bi-ticket-perforated me-1"></i>@item.CouponCode
-													</span>
-												</td>
-												<td><span class="price-tag-sm" style="color:var(--restaurant-green);">@item.DiscountAmount.ToString("c")</span></td>
-												<td><span class="text-muted">@item.MinAmount.ToString("c")</span></td>
-												<td class="text-end">
-													<a asp-action="CouponDelete" asp-route-couponId="@item.CouponId" class="btn btn-sm btn-danger">
-														<i class="bi bi-trash"></i>
-													</a>
-												</td>
-											</tr>
-										}
-									</tbody>
-								</table>
-							</div>
-						</div>
-
+					<th>Min. Order</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td class="align-middle">
+							<span class="badge badge-gold" style="font-size:.85rem;padding:.35rem .75rem;">
+								<i class="bi bi-ticket-perforated me-1"></i>@item.CouponCode
+							</span>
+						</td>
+						<td class="align-middle">
+							<span class="fw-semibold" style="color:var(--restaurant-green);">@item.DiscountAmount.ToString("c")</span>
+						</td>
+						<td class="align-middle text-muted">@item.MinAmount.ToString("c")</td>
+						<td class="align-middle text-end">
+							<a asp-action="CouponDelete" asp-route-couponId="@item.CouponId"
+							   class="btn btn-sm btn-outline-danger">
+								<i class="bi bi-trash"></i>
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </div>
