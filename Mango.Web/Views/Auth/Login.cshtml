@@ -1,26 +1,90 @@
 ﻿@model LoginRequestDto
 
-<form method="post">
-    <div class="container border p-4">
-        <div class="row text-center">
-            <h1>Login</h1>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <input asp-for="UserName" class="form-control" placeholder="Username..."/>
-                <span asp-validation-for="UserName" class="text-danger" />
-            </div>
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <input asp-for="Password" class="form-control" placeholder="Password..." />
-                <span asp-validation-for="Password" class="text-danger" />
-            </div>
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <button type="submit" class="form-control btn btn-success" value="Submit">Login</button>
-            </div>
-        </div>
-    </div>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In &mdash; Mango Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body style="background:linear-gradient(160deg,#1c1c1c 0%,#2e1a0e 60%,#3d2510 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;">
+
+<div class="auth-card fade-in-up">
+    <div class="auth-card-header">
+        <span class="auth-icon">&#129374;</span>
+        <h2>Welcome Back</h2>
+        <p>Sign in to your Mango account</p>
+    </div>
+    <div class="auth-card-body">
+        <form method="post">
+            <div class="mb-4">
+                <label asp-for="UserName" class="form-label">
+                    <i class="bi bi-person me-1 text-gold"></i>Username
+                </label>
+                <input asp-for="UserName" class="form-control" placeholder="Enter your username" autofocus />
+                <span asp-validation-for="UserName" class="text-danger small"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="Password" class="form-label">
+                    <i class="bi bi-lock me-1 text-gold"></i>Password
+                </label>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control"
+                           placeholder="Enter your password" id="passwordField" />
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                            style="border:2px solid var(--border-warm);">
+                        <i class="bi bi-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                    <label class="form-check-label small" for="rememberMe">Remember me</label>
+                </div>
+                <a href="#" class="small" style="color:var(--brand-primary);text-decoration:none;">Forgot password?</a>
+            </div>
+            <div class="d-grid mb-4">
+                <button type="submit" class="btn btn-gold btn-lg">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </button>
+            </div>
+            <div class="divider-ornament"><span>&#10022;</span></div>
+            <div class="d-flex justify-content-center align-items-center gap-2 my-3">
+                <small class="text-muted">New to Mango?</small>
+                <a asp-controller="Auth" asp-action="Register"
+                   style="color:var(--brand-primary);font-weight:700;text-decoration:none;">Create an account</a>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-controller="Home" asp-action="Index" class="small" style="color:var(--text-muted);text-decoration:none;">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Menu
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<partial name="_ValidationScriptsPartial" />
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const f = document.getElementById('passwordField');
+        const icon = document.getElementById('toggleIcon');
+        f.type = f.type === 'password' ? 'text' : 'password';
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+</script>
+</body>
+</html>

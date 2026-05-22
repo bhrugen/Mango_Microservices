@@ -7,90 +7,91 @@
     <input asp-for="CartHeader.Discount" hidden />
     <input asp-for="CartHeader.CartTotal" hidden />
 
-    <div class="border mt-2 p-4 rounded">
-        <div class="container row">
-            <div class="col-md-7 col-12">
-                <span style="font-size:25px;" class="text-warning mb-2">Order Summary</span>
-            </div>
-            <div class="col-md-5 col-12">
-                <a asp-action="CartIndex" class="btn btn-outline-warning form-control">Back to Cart</a>
-            </div>
-            <br /><br /><br />
-            <hr />
-            <div class="col-7">
-                <div class="row pt-2">
-                    <div class="col-12 py-2">
-                        <input asp-for="CartHeader.Name" placeholder="full name..." class="form-control" />
-                        <span asp-validation-for="CartHeader.Name" class="text-danger"></span>
-                    </div>
-                    <div class="col-12 py-2">
-                        <input placeholder="email..." asp-for="CartHeader.Email" class="form-control" />
-                        <span asp-validation-for="CartHeader.Email" class="text-danger"></span>
-                    </div>
-                    <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.Phone" placeholder="phone number..." />
-                        <span asp-validation-for="CartHeader.Phone" class="text-danger"></span>
-                    </div>
-                    <div class="col-12 pt-2">
-                        <label class="col-form-label">Order will be ready in 30minutes after placing order. If you place order when restaurant is closed it will be ready next day.</label>
-                    </div>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+        <div>
+            <div class="section-label"><span>Final Step</span></div>
+            <h2 class="section-title mb-0">Complete Your Order</h2>
+        </div>
+        <a asp-action="CartIndex" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Cart
+        </a>
+    </div>
 
+    <div class="row g-4">
+        <!-- Contact Details -->
+        <div class="col-lg-7 fade-in-up">
+            <div class="card">
+                <div class="card-header">
+                    <span style="font-family:Georgia,serif;font-weight:700;font-size:1rem;color:var(--charcoal);">
+                        <i class="bi bi-person-lines-fill me-2" style="color:var(--brand-primary);"></i>Contact Details
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-person me-1 text-gold"></i>Full Name</label>
+                        <input asp-for="CartHeader.Name" class="form-control" placeholder="Your full name" />
+                        <span asp-validation-for="CartHeader.Name" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-envelope me-1 text-gold"></i>Email Address</label>
+                        <input asp-for="CartHeader.Email" class="form-control" placeholder="you@example.com" />
+                        <span asp-validation-for="CartHeader.Email" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label"><i class="bi bi-telephone me-1 text-gold"></i>Phone Number</label>
+                        <input asp-for="CartHeader.Phone" class="form-control" placeholder="+1 (555) 000-0000" />
+                        <span asp-validation-for="CartHeader.Phone" class="text-danger small"></span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="bi bi-clock-fill"></i>
+                        <div>
+                            <div class="fw-semibold" style="font-size:.875rem;">Ready in ~30 minutes</div>
+                            <div class="text-muted" style="font-size:.8rem;">Orders placed when closed will be ready next opening day.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-5">
-                <div class="card mt-2">
-                    <div class="card-body">
-                        <div class=" d-none d-lg-block">
-                            <div class="row text-danger">
-                                <div class="col-6">
-                                    Product Details
-                                </div>
+        </div>
 
-                                <div class="col-3">
-                                    Price
-                                </div>
-                                <div class="col-3">
-                                    Count
-                                </div>
-                            </div>
+        <!-- Order Review -->
+        <div class="col-lg-5 fade-in-up">
+            <div class="card" style="position:sticky;top:20px;">
+                <div class="card-header bg-dark-restaurant">
+                    <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                        <i class="bi bi-receipt me-2"></i>Order Review
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    @foreach(var cartObj in Model.CartDetails){
+                    <div class="d-flex align-items-center gap-3 p-3" style="border-bottom:1px solid var(--border-warm);">
+                        <img src="@cartObj.Product.ImageUrl" alt="@cartObj.Product.Name"
+                             style="width:52px;height:52px;object-fit:cover;border-radius:var(--radius-md);flex-shrink:0;" />
+                        <div class="flex-grow-1">
+                            <div style="font-weight:600;font-size:.9rem;color:var(--charcoal);">@cartObj.Product.Name</div>
+                            <div class="text-muted" style="font-size:.8rem;">x @cartObj.Count · @cartObj.Product.Price.ToString("c") each</div>
                         </div>
-                        <hr />
-                        @foreach(var cartObj in Model.CartDetails){
-                        <div class="row h-100">
-                            <div class="col-6">
-                                <span style="font-size:20px">@cartObj.Product.Name</span>
-                            </div>
-
-                            <div class="col-3" style="font-size:11px;">
-                                    <span style="font-size:17px;"> @cartObj.Product.Price.ToString("c")</span>
-
-                            </div>
-                            <div class="col-3" style="font-size:11px;">
-                                    <span style="font-size:17px;"> @cartObj.Count</span>
-                            </div>
-                        </div>
-                        <hr />
-                        }
-                        <div class="row">
-                            <div class="col-12 text-center pr-4 text-danger">
-                                Order Total :  @Model.CartHeader.CartTotal.ToString("c") <br />
-                                @if (Model.CartHeader.Discount > 0)
-                                {
-                                    <span class="text-success"> Order Discount :  @Model.CartHeader.Discount.ToString("c")</span>
-                                }
-                            </div>
-                        </div>
-
+                        <div class="price-tag-sm">@((cartObj.Product.Price * cartObj.Count).ToString("c"))</div>
                     </div>
-                    <div class="card-footer">
-                        <div class="row">
-
-                            <div class="col-12 ">
-                                <button type="submit" class="btn btn-success form-control ">
-                                    <span>Place Order</span>
-                                </button>
-                            </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    @if (Model.CartHeader.Discount > 0)
+                    {
+                        <div class="d-flex justify-content-between mb-2" style="color:var(--restaurant-green);">
+                            <span class="small">Promo Discount</span>
+                            <span class="fw-semibold">-@Model.CartHeader.Discount.ToString("c")</span>
                         </div>
+                    }
+                    <div class="divider-ornament mb-3"><span>+</span></div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span style="font-family:Georgia,serif;font-weight:700;">Total</span>
+                        <span class="price-tag">@Model.CartHeader.CartTotal.ToString("c")</span>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-gold btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Confirm Order
+                        </button>
                     </div>
                 </div>
             </div>

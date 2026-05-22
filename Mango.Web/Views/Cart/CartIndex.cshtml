@@ -1,100 +1,184 @@
 ﻿@model CartDto
-@if(Model.CartHeader!=null && Model.CartDetails?.Count()>0){
-<form method="post" asp-action="EmailCart">
-    <br />
-    <input asp-for="CartHeader.UserId" hidden />
-    <input asp-for="CartHeader.CartHeaderId" hidden />
-    <div class="">
-        <div class="card border mt-4 container">
-            <div class="card-header bg-dark text-light ml-0 row ">
-                <div class="col-6">
-                    <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
-                </div>
-                <div class="col-6 text-end">
-                    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Continue Shopping</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class=" d-none d-lg-block">
-                    <div class="row text-info">
-                        <div class="col-lg-2">
-                        </div>
-                        <div class="col-lg-5">
-                            Product Details
-                        </div>
-                        <div class="col-lg-2">
-                            Price
-                        </div>
-                        <div class="col-lg-2">
-                            Count
-                        </div>
-                        <div class="col-lg-1">
-                        </div>
-                    </div>
-                </div>
-                <hr />
 
-                @foreach(var cartObj in Model.CartDetails){
-                <div class="row h-100">
-                    <div class="col-4 col-md-2 text-center py-2">
-                        <img src="@cartObj.Product.ImageUrl" class="rounded" width="100%" />
+@{
+    ViewData["Title"] = "Your Order";
+}
+
+@if(Model.CartHeader!=null && Model.CartDetails?.Count()>0){
+<div class="py-2">
+    <form method="post" asp-action="EmailCart">
+        <input asp-for="CartHeader.UserId" hidden />
+        <input asp-for="CartHeader.CartHeaderId" hidden />
+
+        <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+            <div>
+                <div class="section-label"><span>Your Selection</span></div>
+                <h2 class="section-title mb-0">Your Order
+                    <span class="badge badge-gold ms-2" style="font-size:.9rem;vertical-align:middle;">
+                        @Model.CartDetails.Count() @(Model.CartDetails.Count() == 1 ? "dish" : "dishes")
+                    </span>
+                </h2>
+            </div>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary">
+                <i class="bi bi-grid me-2"></i>Add More
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card fade-in-up">
+                    <div class="card-header">
+                        <span style="font-family:Georgia,serif;font-weight:700;font-size:1rem;color:var(--charcoal);">
+                            <i class="bi bi-basket3 me-2" style="color:var(--brand-primary);"></i>Order Items
+                        </span>
                     </div>
-                    <div class="col-8 col-md-5">
-                        <h5>@cartObj.Product.Name</h5>
-                        <div style="font-size:11px;">@Html.Raw(cartObj.Product.Description)</div>
-                    </div>
-                    <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                            <span style="font-size:17px;">@string.Format("{0:c}",cartObj.Product.Price) </span>
-                    </div>
-                    <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                        <span style="font-size:17px;"> @cartObj.Count</span>
-                    </div>
-                    <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
-                        <a asp-action="Remove" asp-route-cartDetailsId="@cartObj.CartDetailsId" class="btn btn-sm btn-danger">
-                            <i class="bi bi-trash-fill"></i>
-                        </a>
-                    </div>
-                </div>
-                }
-                <hr />
-                <div class="row">
-                    <div class="col-6">
-                        @if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
-                        {
-                            <span>Coupon:</span>
-                            <input asp-for="CartHeader.CouponCode" />
-                            <button type="submit" asp-action="ApplyCoupon" class="btn btn-sm btn-success"> Apply </button>
-                        }
-                        else
-                        {
-                            <span>Coupon:</span>
-                            <input asp-for="CartHeader.CouponCode" disabled/>
-                            <button type="submit" asp-action="RemoveCoupon" class="btn btn-sm btn-success"> Remove </button>
-                        }
-                    </div>
-                    <div class="col-6 text-end">
-                        <span class="text-danger" style="font-size:21px;">  Order Total :  @string.Format("{0:c}", Model.CartHeader.CartTotal)  <br /></span>
-                        @if (Model.CartHeader.Discount > 0)
-                        {
-                            <span class="text-success"> Order Discount :   @string.Format("{0:c}", Model.CartHeader.Discount ) </span>
+                    <div class="card-body p-0">
+                        @foreach(var cartObj in Model.CartDetails){
+                        <div class="cart-item">
+                            <div class="row align-items-center g-3">
+                                <div class="col-3 col-md-2">
+                                    <img src="@cartObj.Product.ImageUrl" alt="@cartObj.Product.Name"
+                                         style="width:75px;height:75px;object-fit:cover;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);" />
+                                </div>
+                                <div class="col-9 col-md-4">
+                                    <div class="menu-card-category mb-0">@cartObj.Product.CategoryName</div>
+                                    <h6 style="font-family:Georgia,serif;font-weight:700;color:var(--charcoal);margin-bottom:.25rem;">
+                                        @cartObj.Product.Name
+                                    </h6>
+                                    <button type="button" class="btn btn-link p-0 text-danger"
+                                            style="font-size:.8rem;text-decoration:none;"
+                                            onclick="location.href='@Url.Action("Remove", new { cartDetailsId = cartObj.CartDetailsId })'">
+                                        <i class="bi bi-x-circle me-1"></i>Remove
+                                    </button>
+                                </div>
+                                <div class="col-4 col-md-2 text-center">
+                                    <div class="text-muted small mb-1">Unit Price</div>
+                                    <div class="fw-semibold">@string.Format("{0:c}", cartObj.Product.Price)</div>
+                                </div>
+                                <div class="col-4 col-md-2 text-center">
+                                    <div class="text-muted small mb-1">Qty</div>
+                                    <span class="badge" style="background:var(--restaurant-cream);color:var(--charcoal);border:1.5px solid var(--border-warm);font-size:.9rem;padding:.4rem .8rem;">
+                                        x @cartObj.Count
+                                    </span>
+                                </div>
+                                <div class="col-4 col-md-2 text-end">
+                                    <div class="text-muted small mb-1">Subtotal</div>
+                                    <div class="price-tag-sm">
+                                        @string.Format("{0:c}", cartObj.Product.Price * cartObj.Count)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         }
                     </div>
                 </div>
             </div>
-            <div class="card-footer row">
-                <div class="col-6 col-md-3 ">
-                    <button type="submit" class="btn btn-outline-danger form-control">Email Cart</button>
-                </div>
-                <div class="col-6 col-md-3 offset-md-6">
-                    <a asp-action="Checkout" class="btn btn-success form-control">Looks Good? </a>
+
+            <div class="col-lg-4">
+                <div style="position:sticky;top:20px;">
+                    <div class="card mb-3 fade-in-up">
+                        <div class="card-header">
+                            <span style="font-family:Georgia,serif;font-weight:700;font-size:.95rem;">
+                                <i class="bi bi-ticket-perforated me-2" style="color:var(--brand-primary);"></i>Promo Code
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            @if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
+                            {
+                                <div class="input-group">
+                                    <input asp-for="CartHeader.CouponCode" class="form-control"
+                                           placeholder="Enter promo code" style="font-size:.9rem;" />
+                                    <button type="submit" asp-action="ApplyCoupon" class="btn btn-gold px-3">Apply</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-between p-2"
+                                     style="background:rgba(46,125,50,.08);border:1.5px solid rgba(46,125,50,.2);border-radius:var(--radius-md);">
+                                    <span class="small fw-semibold" style="color:var(--restaurant-green);">
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                        <strong>@Model.CartHeader.CouponCode</strong> applied!
+                                    </span>
+                                    <button type="submit" asp-action="RemoveCoupon"
+                                            class="btn btn-sm btn-link text-danger p-0" style="font-size:.8rem;text-decoration:none;">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card fade-in-up">
+                        <div class="card-header bg-dark-restaurant">
+                            <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                                <i class="bi bi-receipt me-2"></i>Order Summary
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted">Subtotal</span>
+                                <span class="fw-semibold">
+                                    @string.Format("{0:c}", Model.CartHeader.CartTotal + Model.CartHeader.Discount)
+                                </span>
+                            </div>
+                            @if (Model.CartHeader.Discount > 0)
+                            {
+                                <div class="d-flex justify-content-between mb-3" style="color:var(--restaurant-green);">
+                                    <span><i class="bi bi-ticket-perforated me-1"></i>Promo Discount</span>
+                                    <span class="fw-semibold">-@string.Format("{0:c}", Model.CartHeader.Discount)</span>
+                                </div>
+                            }
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted">Delivery</span>
+                                <span class="fw-semibold" style="color:var(--restaurant-green);">FREE</span>
+                            </div>
+                            <div class="divider-ornament my-3"><span>+</span></div>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span style="font-family:Georgia,serif;font-weight:700;font-size:1.1rem;">Total</span>
+                                <span class="price-tag">@string.Format("{0:c}", Model.CartHeader.CartTotal)</span>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <a asp-action="Checkout" class="btn btn-gold btn-lg">
+                                    <i class="bi bi-credit-card me-2"></i>Place Order
+                                </a>
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="bi bi-envelope me-2"></i>Email Order
+                                </button>
+                            </div>
+                            <div class="d-flex justify-content-center gap-3 mt-4 pt-3"
+                                 style="border-top:1px solid var(--border-warm);">
+                                <div class="text-center">
+                                    <i class="bi bi-shield-lock-fill d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
+                                    <span class="text-muted" style="font-size:.7rem;">Secure</span>
+                                </div>
+                                <div class="text-center">
+                                    <i class="bi bi-truck d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
+                                    <span class="text-muted" style="font-size:.7rem;">Fast Delivery</span>
+                                </div>
+                                <div class="text-center">
+                                    <i class="bi bi-award-fill d-block mb-1" style="color:var(--brand-primary);font-size:1.25rem;"></i>
+                                    <span class="text-muted" style="font-size:.7rem;">Quality</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 }
-else{
-    <div>
-        <p>Please add items to cart.</p>
+else {
+<div class="text-center py-5 fade-in-up">
+    <div class="card mx-auto border-0" style="max-width:420px;background:transparent;">
+        <div class="card-body py-5">
+            <div style="font-size:4rem;margin-bottom:1rem;">&#127869;</div>
+            <h3 style="font-family:Georgia,serif;font-weight:700;">Your Order is Empty</h3>
+            <p class="text-muted mb-4">Browse our menu and add your favourite dishes to get started.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-gold btn-lg px-5">
+                <i class="bi bi-grid me-2"></i>View Menu
+            </a>
+        </div>
     </div>
+</div>
 }

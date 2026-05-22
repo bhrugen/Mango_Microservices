@@ -1,73 +1,142 @@
-ï»¿@using Mango.Web.Utility
+@using Mango.Web.Utility
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Mango.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <title>@ViewData["Title"] - Mango Restaurant</title>
+
+    <!-- Bootstrap 5.3.8 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- DataTables with Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" />
+
+    <!-- Restaurant Theme -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css"/>
-    <link rel="stylesheet" href="~/Mango.Web.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+    <!-- Toastr (after site.css so our overrides apply) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- ===== NAVBAR ===== -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark  box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Mango.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-expand-lg navbar-restaurant">
+            <div class="container px-4">
+
+                <!-- Brand -->
+                <a class="navbar-brand-restaurant" asp-controller="Home" asp-action="Index">
+                    <div class="brand-icon">??</div>
+                    <div class="brand-text">
+                        <span class="brand-name">Mango</span>
+                        <span class="brand-tagline">Fine Dining</span>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler border-0 text-white" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list fs-4"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-grid me-1"></i>Menu
+                            </a>
                         </li>
-                        
+
                         @if (User.IsInRole(SD.RoleAdmin))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Content Management
+                                <a class="nav-link dropdown-toggle" href="#" id="manageDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-sliders me-1"></i>Manage
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Coupon</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="ProductIndex">Product</a></li>
-                                    <li><hr class="dropdown-divider"></li>
+                                <ul class="dropdown-menu dropdown-restaurant" aria-labelledby="manageDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">
+                                            <i class="bi bi-ticket-perforated text-warning"></i>Coupons
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Product" asp-action="ProductIndex">
+                                            <i class="bi bi-egg-fried text-warning"></i>Dishes
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         }
+
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">
-                               Manage Order
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Cart" asp-action="CartIndex">
-                                &nbsp; <i class="bi bi-cart"></i>&nbsp;
+                            <a class="nav-link" asp-controller="Order" asp-action="OrderIndex">
+                                <i class="bi bi-receipt me-1"></i>My Orders
                             </a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav">
+
+                    <!-- Right links -->
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
+
+                        <!-- Cart -->
+                        <li class="nav-item">
+                            <a class="cart-nav-btn" asp-controller="Cart" asp-action="CartIndex">
+                                <i class="bi bi-bag"></i>
+                                <span class="cart-badge">0</span>
+                            </a>
+                        </li>
+
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link " asp-controller="Auth" asp-action="Login">Login</a>
+                                <a class="btn btn-outline-light btn-sm" asp-controller="Auth" asp-action="Login">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link " asp-controller="Auth" asp-action="Register">Register</a>
+                                <a class="btn btn-gold btn-sm" asp-controller="Auth" asp-action="Register">
+                                    <i class="bi bi-person-plus me-1"></i>Reserve
+                                </a>
                             </li>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link " href="#">Hello @User.Identity.Name</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " asp-controller="Auth" asp-action="Logout">Logout</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#"
+                                   id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="user-avatar">
+                                        @User.Identity.Name?.Substring(0, 1).ToUpper()
+                                    </div>
+                                    <span class="d-none d-md-inline text-white-50" style="font-size:.9rem;">
+                                        @User.Identity.Name
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-restaurant" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bi bi-person text-warning"></i>My Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Order" asp-action="OrderIndex">
+                                            <i class="bi bi-receipt text-warning"></i>My Orders
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">
+                                            <i class="bi bi-box-arrow-right" style="color:#ef4444;"></i>
+                                            <span style="color:#ef4444;">Sign Out</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                     </ul>
@@ -75,22 +144,104 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-            <partial name="_Notifications" />
-        </main>
-    </div>
 
-    <footer class="footer text-muted">
-        <div class="text-center">
-            Made with <i class="bi bi-heart-fill "></i> by DotNetMastery
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="flex-fill">
+        <div class="container py-5">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer-restaurant py-5 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Brand Column -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand">
+                        <span>??</span> Mango
+                    </div>
+                    <p class="footer-tagline">"Where every dish tells a story."</p>
+                    <div class="footer-info-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>123 Orchard Lane, Foodie District</span>
+                    </div>
+                    <div class="footer-info-item">
+                        <i class="bi bi-telephone-fill"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="footer-info-item">
+                        <i class="bi bi-clock-fill"></i>
+                        <span>Mon–Sun · 11:00 AM – 10:00 PM</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6>Explore</h6>
+                    <ul class="list-unstyled">
+                        <li><a asp-controller="Home" asp-action="Index"><i class="bi bi-chevron-right"></i>Our Menu</a></li>
+                        <li><a asp-controller="Order" asp-action="OrderIndex"><i class="bi bi-chevron-right"></i>Orders</a></li>
+                        <li><a asp-controller="Cart" asp-action="CartIndex"><i class="bi bi-chevron-right"></i>Your Cart</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>About Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Categories -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6>Categories</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Appetizers</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Main Course</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Desserts</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Beverages</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-4 col-md-6">
+                    <h6>Stay Updated</h6>
+                    <p style="color:rgba(255,255,255,.5); font-size:.875rem; margin-bottom:1rem;">
+                        Get exclusive offers and new menu updates delivered to your inbox.
+                    </p>
+                    <div class="input-group">
+                        <input type="email" class="form-control"
+                               style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:white;font-size:.875rem;"
+                               placeholder="your@email.com">
+                        <button class="btn btn-gold btn-sm px-3">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex gap-2 mt-3 footer-social">
+                        <a href="#" class="text-white-50"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white-50"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white-50"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-white-50"><i class="bi bi-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <span>&copy; @DateTime.Now.Year Mango Restaurant · All rights reserved.</span>
+                <span class="mt-2 mt-md-0">
+                    Made with <i class="bi bi-heart-fill" style="color:var(--brand-primary);"></i> by DotNetMastery
+                </span>
+            </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <partial name="_Notifications" />
 </body>
+</html>
 </html>

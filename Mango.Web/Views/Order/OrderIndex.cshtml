@@ -1,52 +1,49 @@
 ﻿@{
-
 	var status = Context.Request.Query["status"];
 	var approved = "";
 	var readyforpickup = "";
 	var cancelled = "";
 	var all = "";
 
-	switch(status){
-		case "approved":
-			approved = "active text-white bg-secondary";
-			break;
-		case "readyforpickup":
-			readyforpickup = "active text-white bg-secondary";
-			break;
-		case "cancelled":
-			cancelled = "active text-white bg-secondary";
-			break;
-		default:
-			all = "active text-white bg-secondary";
-			break;
-		}
+	switch (status)
+	{
+		case "approved":       approved = "active"; break;
+		case "readyforpickup": readyforpickup = "active"; break;
+		case "cancelled":      cancelled = "active"; break;
+		default:               all = "active"; break;
+	}
 }
 
-
-
-
-<div class="card shadow border-0 mt-4">
-	<div class="card-header bg-secondary bg-gradient ml-0 py-3 d-flex justify-content-between">
-		<div class="row">
-				<h1 class="text-white">Order List</h1>
-		</div>
-		<ul class="list-group list-group-horizontal-sm pt-2">
-			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved">
-				<li class="list-group-item @approved">Approved</li>
-			</a>
-			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup">
-			<li class="list-group-item @readyforpickup">Ready for Pikcup</li>
-			</a>
-			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled">
-			<li class="list-group-item @cancelled">Cancelled</li>
-			</a>
-			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="all">
-			<li class="list-group-item @all">All</li>
-			</a>
-		</ul>
+<!-- Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 fade-in-up">
+	<div>
+		<div class="section-label"><span>Dashboard</span></div>
+		<h2 class="section-title mb-0">Order List</h2>
 	</div>
+	<!-- Status Filter Tabs -->
+	<div class="d-flex gap-2 flex-wrap mt-3 mt-md-0">
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="all"
+		   class="category-chip @all">
+			<i class="bi bi-grid-3x3-gap"></i>All
+		</a>
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved"
+		   class="category-chip @approved">
+			<i class="bi bi-check-circle"></i>Approved
+		</a>
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup"
+		   class="category-chip @readyforpickup">
+			<i class="bi bi-bag-check"></i>Ready for Pickup
+		</a>
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled"
+		   class="category-chip @cancelled">
+			<i class="bi bi-x-circle"></i>Cancelled
+		</a>
+	</div>
+</div>
+
+<div class="card fade-in-up">
 	<div class="card-body p-4">
-		<table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%">
+		<table id="tblData" class="table pt-3" style="width:100%">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -64,4 +61,5 @@
 
 @section Scripts{
 	<script src="~/js/order.js"></script>
+}
 }

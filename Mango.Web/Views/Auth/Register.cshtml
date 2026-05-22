@@ -1,40 +1,119 @@
 ﻿@model RegistrationRequestDto
 
-<form method="post">
-    <div class="container border p-4">
-        <div class="row text-center p-3">
-            <h1>Register</h1>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <input asp-for="Email" class="form-control" placeholder="Email..." />
-                <span asp-validation-for="Email" class="text-danger" />
-            </div>
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <input asp-for="Name" class="form-control" placeholder="Name..." />
-                <span asp-validation-for="Name" class="text-danger" />
-            </div>
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number..." />
-                <span asp-validation-for="PhoneNumber" class="text-danger" />
-            </div>
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <input asp-for="Password" class="form-control" placeholder="Password..." />
-                <span asp-validation-for="Password" class="text-danger" />
-            </div>
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <select asp-for="Role" class="form-select" asp-items="@ViewBag.RoleList">
-                    <option disabled selected>--Select Role--</option>
-                </select>
-            </div>
-
-            <div class="col-12 col-md-6 offset-md-3 pb-2">
-                <button type="submit" class="form-control btn btn-success" value="Submit">Register</button>
-            </div>
-        </div>
-    </div>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+@{
+    ViewData["Title"] = "Create Account";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account &mdash; Mango Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body style="background:linear-gradient(160deg,#1c1c1c 0%,#2e1a0e 60%,#3d2510 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;">
+
+<div class="auth-card fade-in-up" style="max-width:520px;">
+    <div class="auth-card-header">
+        <span class="auth-icon">&#129374;</span>
+        <h2>Join Mango</h2>
+        <p>Create your account and start ordering</p>
+    </div>
+    <div class="auth-card-body">
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label">
+                        <i class="bi bi-envelope me-1 text-gold"></i>Email Address
+                    </label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="you@example.com" autofocus />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="Name" class="form-label">
+                        <i class="bi bi-person me-1 text-gold"></i>Full Name
+                    </label>
+                    <input asp-for="Name" class="form-control" placeholder="John Doe" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="PhoneNumber" class="form-label">
+                        <i class="bi bi-telephone me-1 text-gold"></i>Phone
+                    </label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="+1 (555) 000-0000" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Password" class="form-label">
+                        <i class="bi bi-lock me-1 text-gold"></i>Password
+                    </label>
+                    <div class="input-group">
+                        <input asp-for="Password" type="password" class="form-control"
+                               placeholder="Create a strong password" id="passwordField" />
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                                style="border:2px solid var(--border-warm);">
+                            <i class="bi bi-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Role" class="form-label">
+                        <i class="bi bi-shield-check me-1 text-gold"></i>Account Role
+                    </label>
+                    <select asp-for="Role" class="form-select" asp-items="@ViewBag.RoleList">
+                        <option disabled selected>Select role...</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                        <label class="form-check-label small" for="termsCheck">
+                            I agree to the
+                            <a href="#" style="color:var(--brand-primary);">Terms of Service</a> &amp;
+                            <a href="#" style="color:var(--brand-primary);">Privacy Policy</a>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-gold btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Create Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="divider-ornament mt-4"><span>&#10022;</span></div>
+            <div class="d-flex justify-content-center align-items-center gap-2 my-3">
+                <small class="text-muted">Already have an account?</small>
+                <a asp-controller="Auth" asp-action="Login"
+                   style="color:var(--brand-primary);font-weight:700;text-decoration:none;">Sign in</a>
+            </div>
+            <div class="text-center">
+                <a asp-controller="Home" asp-action="Index" class="small" style="color:var(--text-muted);text-decoration:none;">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Menu
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<partial name="_ValidationScriptsPartial" />
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const f = document.getElementById('passwordField');
+        const icon = document.getElementById('toggleIcon');
+        f.type = f.type === 'password' ? 'text' : 'password';
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+</script>
+</body>
+</html>

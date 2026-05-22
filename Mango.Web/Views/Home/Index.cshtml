@@ -1,30 +1,139 @@
 ﻿@model IEnumerable<ProductDto>
 
-<form>
-    <div class="container row">
+@{
+    ViewData["Title"] = "Our Menu";
+}
+
+<!-- ===== HERO ===== -->
+<div class="restaurant-hero fade-in">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="hero-label">
+                <i class="bi bi-award-fill"></i>Est. 2018 &middot; Award-Winning Cuisine
+            </div>
+            <h1 class="hero-title">
+                Authentic Flavors,<br>
+                <span class="highlight">Crafted with Passion</span>
+            </h1>
+            <p class="hero-subtitle">
+                From our kitchen to your table &mdash; fresh ingredients, bold recipes,
+                and an experience you won't forget.
+            </p>
+            <div class="hero-features">
+                <span class="hero-feature-pill"><i class="bi bi-truck"></i>Fast Delivery</span>
+                <span class="hero-feature-pill"><i class="bi bi-leaf"></i>Fresh Ingredients</span>
+                <span class="hero-feature-pill"><i class="bi bi-shield-check"></i>Hygiene Certified</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SECTION HEADER ===== -->
+<div class="text-center mb-5">
+    <div class="section-label justify-content-center"><span>What We Offer</span></div>
+    <h2 class="section-title">Today's Menu</h2>
+    <p class="section-subtitle">
+        Handcrafted dishes made fresh every day &mdash; browse and order in seconds.
+    </p>
+</div>
+
+<!-- ===== MENU GRID ===== -->
+@if (Model.Any())
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
         @foreach (var product in Model)
         {
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="p-0 my-3 border rounded">
-                    <div class="card">
-                        <h3 class="card-title text-white-50 text-center py-2">@product.Name</h3>
-                        <img src="@product.ImageUrl" class="card-img-top">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between py-2">
-                                <span class="text-danger" style="font-size:20px;">@string.Format("{0:c}", product.Price)</span>
-                                <span class="badge bg-warning text-white p-2">@product.CategoryName</span>
-                            </div>
-                            <p class="card-text">@Html.Raw(product.Description)</p>
-                            <div class="row">
-                                <div class="col">
-                                    <a asp-action="ProductDetails" asp-route-productId="@product.ProductId"
-                                       class="btn btn-success form-control">Details</a>
-                                </div>
-                            </div>
+            <div class="col fade-in-up">
+                <div class="menu-card h-100">
+                    <div class="menu-card-img-wrap">
+                        <img src="@product.ImageUrl" alt="@product.Name" />
+                        <span class="menu-card-badge">
+                            <i class="bi bi-tag-fill me-1"></i>@product.CategoryName
+                        </span>
+                        <span class="menu-card-price-overlay">
+                            @string.Format("{0:c}", product.Price)
+                        </span>
+                    </div>
+                    <div class="menu-card-body">
+                        <div class="menu-card-category">@product.CategoryName</div>
+                        <h5 class="menu-card-title">@product.Name</h5>
+                        <p class="menu-card-desc">@Html.Raw(product.Description)</p>
+                        <div class="d-flex gap-2 mt-auto">
+                            <a asp-action="ProductDetails" asp-route-productId="@product.ProductId"
+                               class="btn btn-outline-secondary flex-shrink-0"
+                               title="View Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <form asp-action="ProductDetails" method="post" class="flex-grow-1">
+                                <input type="hidden" name="ProductId" value="@product.ProductId" />
+                                <input type="hidden" name="Count" value="1" />
+                                <button type="submit" class="btn btn-gold w-100">
+                                    <i class="bi bi-bag-plus me-1"></i>Add to Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         }
     </div>
-</form>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="card border-0" style="background:transparent;">
+            <div class="card-body py-5">
+                <div style="font-size:4rem; margin-bottom:1rem;">&#127869;</div>
+                <h3 class="section-title">Kitchen is Prepping</h3>
+                <p class="section-subtitle">Our chefs are working on something delicious. Check back soon!</p>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- ===== WHY US SECTION ===== -->
+<div class="divider-ornament my-5"><span>&#10022;</span></div>
+
+<div class="row g-4 mb-2">
+    <div class="col-12 text-center mb-2">
+        <div class="section-label justify-content-center"><span>Why Mango</span></div>
+        <h2 class="section-title">More Than Just a Meal</h2>
+    </div>
+    <div class="col-md-4 fade-in-up">
+        <div class="trust-badge">
+            <i class="bi bi-award-fill" style="font-size:1.5rem;"></i>
+            <div>
+                <div class="fw-bold" style="font-family:Georgia,serif;">Award-Winning Recipes</div>
+                <div class="small text-muted">Recognized by culinary experts nationwide</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 fade-in-up">
+        <div class="trust-badge">
+            <i class="bi bi-clock-fill" style="font-size:1.5rem;"></i>
+            <div>
+                <div class="fw-bold" style="font-family:Georgia,serif;">30-Min Delivery</div>
+                <div class="small text-muted">Hot food delivered fast to your door</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 fade-in-up">
+        <div class="trust-badge">
+            <i class="bi bi-heart-fill" style="font-size:1.5rem;"></i>
+            <div>
+                <div class="fw-bold" style="font-family:Georgia,serif;">Made with Love</div>
+                <div class="small text-muted">Every dish prepared with care and fresh produce</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+                el.style.animationDelay = `${i * 80}ms`;
+            });
+        });
+    </script>
+}

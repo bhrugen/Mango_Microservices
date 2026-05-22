@@ -1,22 +1,1167 @@
+/* ===================================================
+   Mango Restaurant — Premium Design System
+   Warm, elegant, food-forward aesthetic
+   =================================================== */
+
+:root {
+    /* Restaurant Brand Colors */
+    --brand-primary:    #c8913a;   /* Warm Gold */
+    --brand-dark:       #a0712a;   /* Deep Gold */
+    --brand-light:      #e8b86d;   /* Light Gold */
+
+    --restaurant-red:   #c0392b;   /* Deep Red */
+    --restaurant-green: #2e7d32;   /* Forest Green */
+    --restaurant-cream: #fdf6ec;   /* Warm Cream */
+    --restaurant-warm:  #fef9f2;   /* Off White */
+
+    /* Neutrals */
+    --charcoal:         #1c1c1c;
+    --charcoal-mid:     #2e2e2e;
+    --charcoal-light:   #444;
+    --text-muted:       #7a6652;
+    --border-warm:      #e8ddd0;
+    --surface:          #ffffff;
+
+    /* Gradients */
+    --gradient-hero:    linear-gradient(160deg, #1c1c1c 0%, #2e1a0e 60%, #3d2510 100%);
+    --gradient-gold:    linear-gradient(135deg, #c8913a 0%, #e8b86d 50%, #c8913a 100%);
+    --gradient-card:    linear-gradient(180deg, rgba(28,28,28,0) 50%, rgba(28,28,28,0.85) 100%);
+    --gradient-warm:    linear-gradient(135deg, #fdf6ec 0%, #fef9f2 100%);
+
+    /* Shadows */
+    --shadow-xs:  0 1px 3px rgba(28, 28, 28, 0.06);
+    --shadow-sm:  0 2px 8px rgba(28, 28, 28, 0.08);
+    --shadow-md:  0 4px 16px rgba(28, 28, 28, 0.12);
+    --shadow-lg:  0 8px 32px rgba(28, 28, 28, 0.16);
+    --shadow-xl:  0 16px 48px rgba(28, 28, 28, 0.20);
+    --shadow-gold: 0 4px 20px rgba(200, 145, 58, 0.35);
+
+    /* Typography */
+    --font-heading: 'Georgia', 'Times New Roman', serif;
+    --font-body:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Spacing & Shape */
+    --radius-sm:   4px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-xl:   16px;
+    --radius-2xl:  24px;
+    --radius-pill: 9999px;
+
+    /* Transitions */
+    --ease-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-base:   250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Base ===== */
 html {
-  font-size: 14px;
+    font-size: 15px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html { font-size: 16px; }
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: var(--font-body);
+    background-color: var(--restaurant-warm);
+    color: var(--charcoal);
+    line-height: 1.65;
+}
+
+/* Headings use serif for elegance */
+h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.3px;
+}
+
+/* ===================================================
+   NAVBAR — Dark, rich, restaurant-feel
+   =================================================== */
+.navbar-restaurant {
+    background: var(--charcoal) !important;
+    border-bottom: 3px solid var(--brand-primary);
+    box-shadow: var(--shadow-lg);
+    padding: 0.75rem 0;
+}
+
+.navbar-brand-restaurant {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+}
+
+.navbar-brand-restaurant .brand-icon {
+    width: 42px;
+    height: 42px;
+    background: var(--gradient-gold);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: var(--shadow-gold);
+    transition: transform var(--ease-base);
+}
+
+.navbar-brand-restaurant:hover .brand-icon {
+    transform: rotate(-5deg) scale(1.05);
+}
+
+.navbar-brand-restaurant .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.navbar-brand-restaurant .brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--brand-light);
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand-restaurant .brand-tagline {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Nav links */
+.navbar-restaurant .nav-link {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--radius-md);
+    transition: all var(--ease-base);
+    position: relative;
+}
+
+.navbar-restaurant .nav-link:hover,
+.navbar-restaurant .nav-link.active {
+    color: var(--brand-light) !important;
+    background: rgba(200, 145, 58, 0.12);
+}
+
+/* Dropdown */
+.dropdown-restaurant {
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 0.5rem;
+    background: var(--charcoal-mid);
+    min-width: 210px;
+    margin-top: 0.5rem;
+    animation: dropIn var(--ease-base) ease;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-restaurant .dropdown-item {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all var(--ease-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dropdown-restaurant .dropdown-item:hover {
+    background: rgba(200, 145, 58, 0.2);
+    color: var(--brand-light);
+    transform: translateX(4px);
+}
+
+.dropdown-restaurant .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Cart icon */
+.cart-nav-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    background: rgba(200, 145, 58, 0.12);
+    border: 1px solid rgba(200, 145, 58, 0.25);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-light) !important;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all var(--ease-base);
+}
+
+.cart-nav-btn:hover {
+    background: var(--brand-primary);
+    color: white !important;
+    border-color: var(--brand-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+}
+
+.cart-nav-btn .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--restaurant-red);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--charcoal);
+}
+
+/* User avatar */
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--gradient-gold);
+    color: var(--charcoal);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: transform var(--ease-base);
+}
+
+.user-avatar:hover {
+    transform: scale(1.08);
+}
+
+/* ===================================================
+   HERO SECTION
+   =================================================== */
+.restaurant-hero {
+    position: relative;
+    background: var(--gradient-hero);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    padding: 5rem 3rem;
+    margin-bottom: 3rem;
+}
+
+.restaurant-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8913a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.restaurant-hero::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(200, 145, 58, 0.12) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(200, 145, 58, 0.15);
+    border: 1px solid rgba(200, 145, 58, 0.35);
+    color: var(--brand-light);
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+}
+
+.hero-title .highlight {
+    color: var(--brand-light);
+}
+
+.hero-subtitle {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 480px;
+    margin-bottom: 2rem;
+}
+
+.hero-features {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.hero-feature-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.875rem;
+    font-weight: 500;
+    backdrop-filter: blur(6px);
+}
+
+.hero-feature-pill i {
+    color: var(--brand-light);
+}
+
+/* Hero decorative image block */
+.hero-image-block {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(200, 145, 58, 0.3);
+    box-shadow: 0 0 80px rgba(200, 145, 58, 0.2);
+}
+
+@media (max-width: 991px) {
+    .restaurant-hero { padding: 3rem 2rem; }
+    .hero-image-block { display: none; }
+    .hero-title { font-size: 2rem; }
+}
+
+@media (max-width: 576px) {
+    .restaurant-hero { padding: 2.5rem 1.5rem; border-radius: var(--radius-xl); }
+}
+
+/* ===================================================
+   SECTION DIVIDERS
+   =================================================== */
+.section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--brand-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.section-label::before,
+.section-label::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--brand-primary);
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Ornamental divider */
+.divider-ornament {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.divider-ornament::before,
+.divider-ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-warm), transparent);
+}
+
+.divider-ornament span {
+    color: var(--brand-primary);
+    font-size: 1.2rem;
+}
+
+/* ===================================================
+   MENU / PRODUCT CARDS
+   =================================================== */
+.menu-card {
+    background: var(--surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all var(--ease-base);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.menu-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(200, 145, 58, 0.25);
+}
+
+.menu-card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 240px;
+}
+
+.menu-card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--ease-slow);
+}
+
+.menu-card:hover .menu-card-img-wrap img {
+    transform: scale(1.08);
+}
+
+/* Gradient overlay on image */
+.menu-card-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-card);
+    pointer-events: none;
+}
+
+.menu-card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    background: var(--gradient-gold);
+    color: var(--charcoal);
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-md);
+}
+
+.menu-card-price-overlay {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 2;
+    background: rgba(28, 28, 28, 0.85);
+    color: var(--brand-light);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    font-size: 1rem;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(200, 145, 58, 0.25);
+}
+
+.menu-card-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.menu-card-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.menu-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.menu-card-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ===================================================
+   BUTTONS — Restaurant Style
+   =================================================== */
+.btn {
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1.5rem;
+    transition: all var(--ease-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: 0.2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* Gold / Primary CTA */
+.btn-gold {
+    background: var(--gradient-gold);
+    color: var(--charcoal);
+    border: none;
+    font-weight: 700;
+    box-shadow: var(--shadow-gold);
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, #e8b86d 0%, #c8913a 100%);
+    color: var(--charcoal);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(200, 145, 58, 0.45);
+}
+
+/* Outline Gold */
+.btn-outline-gold {
+    background: transparent;
+    color: var(--brand-primary);
+    border: 2px solid var(--brand-primary);
+    font-weight: 600;
+}
+
+.btn-outline-gold:hover {
+    background: var(--brand-primary);
+    color: var(--charcoal);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+}
+
+/* Dark / Charcoal */
+.btn-charcoal {
+    background: var(--charcoal);
+    color: white;
+    border: none;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-charcoal:hover {
+    background: var(--charcoal-light);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Standard Bootstrap enhancements */
+.btn-primary {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: var(--charcoal-light);
+    border-color: var(--charcoal-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-success {
+    background: var(--restaurant-green);
+    border-color: var(--restaurant-green);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-success:hover {
+    background: #1b5e20;
+    border-color: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-danger {
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-outline-light {
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+.btn-sm { padding: 0.4rem 1rem; font-size: 0.875rem; }
+.btn-lg { padding: 0.875rem 2.25rem; font-size: 1.05rem; }
+
+/* ===================================================
+   FORM CONTROLS
+   =================================================== */
+.form-control,
+.form-select {
+    border: 2px solid var(--border-warm);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    color: var(--charcoal);
+    font-size: 0.9375rem;
+    transition: all var(--ease-base);
+}
+
+.form-control:hover:not(:focus),
+.form-select:hover:not(:focus) {
+    border-color: var(--brand-light);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(200, 145, 58, 0.12);
+    background: var(--surface);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    font-size: 0.9375rem;
+}
+
+.input-group-text {
+    background: var(--restaurant-cream);
+    border: 2px solid var(--border-warm);
+    color: var(--brand-primary);
+    font-weight: 500;
+}
+
+.form-check-input:checked {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+}
+
+/* ===================================================
+   CARDS — General
+   =================================================== */
+.card {
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    background: var(--surface);
+    transition: all var(--ease-base);
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card-header {
+    border-bottom: 1px solid var(--border-warm);
+    background: var(--restaurant-cream);
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+    font-family: var(--font-heading);
+}
+
+.card-header.bg-dark-restaurant {
+    background: var(--charcoal);
+    color: white;
+    border: none;
+}
+
+.card-header.bg-gold {
+    background: var(--gradient-gold);
+    color: var(--charcoal);
+    border: none;
+    font-weight: 700;
+}
+
+.card-body  { padding: 1.5rem; }
+.card-footer {
+    background: var(--restaurant-cream);
+    border-top: 1px solid var(--border-warm);
+    padding: 1.25rem 1.5rem;
+}
+
+/* ===================================================
+   BADGES & TAGS
+   =================================================== */
+.badge {
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.badge-gold {
+    background: var(--gradient-gold);
+    color: var(--charcoal);
+}
+
+.badge-dark {
+    background: var(--charcoal);
+    color: white;
+}
+
+.category-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    background: var(--restaurant-cream);
+    border: 1.5px solid var(--border-warm);
+    border-radius: var(--radius-pill);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-decoration: none;
+    transition: all var(--ease-base);
+    cursor: pointer;
+}
+
+.category-chip:hover,
+.category-chip.active {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+}
+
+/* Price */
+.price-tag {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--brand-primary);
+    font-family: var(--font-heading);
+}
+
+.price-tag-sm {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--brand-primary);
+}
+
+/* ===================================================
+   TABLES
+   =================================================== */
+.table {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.table thead th {
+    background: var(--charcoal);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem 1.25rem;
+    border: none;
+}
+
+.table tbody tr {
+    transition: background var(--ease-fast);
+    border-bottom: 1px solid var(--border-warm);
+}
+
+.table tbody tr:hover {
+    background: var(--restaurant-cream);
+}
+
+.table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-color: var(--border-warm);
+}
+
+/* DataTables */
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    border: 2px solid var(--border-warm);
+    border-radius: var(--radius-md);
+    padding: 0.45rem 0.75rem;
+    background: var(--surface);
+    transition: all var(--ease-base);
+}
+
+.dataTables_wrapper .dataTables_length select:focus,
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(200, 145, 58, 0.12);
+    outline: none;
+}
+
+/* ===================================================
+   CART
+   =================================================== */
+.cart-item {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    transition: background var(--ease-fast);
+    border-bottom: 1px solid var(--border-warm);
+}
+
+.cart-item:last-child { border-bottom: none; }
+
+.cart-item:hover {
+    background: var(--restaurant-cream);
+}
+
+.cart-item img {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Quantity Selector */
+.quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--restaurant-cream);
+    border: 2px solid var(--border-warm);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 0.75rem;
+}
+
+.quantity-selector button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    color: var(--brand-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--ease-base);
+    box-shadow: var(--shadow-xs);
+    line-height: 1;
+}
+
+.quantity-selector button:hover {
+    background: var(--brand-primary);
+    color: white;
+    box-shadow: var(--shadow-gold);
+    transform: scale(1.1);
+}
+
+.quantity-selector input {
+    width: 48px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--charcoal);
+}
+
+/* ===================================================
+   FOOTER
+   =================================================== */
+.footer-restaurant {
+    background: var(--charcoal);
+    border-top: 3px solid var(--brand-primary);
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: auto;
+}
+
+.footer-restaurant .footer-brand {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brand-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.footer-restaurant .footer-tagline {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.footer-restaurant h6 {
+    color: var(--brand-light);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.25rem;
+}
+
+.footer-restaurant a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all var(--ease-base);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+}
+
+.footer-restaurant a:hover {
+    color: var(--brand-light);
+    transform: translateX(4px);
+}
+
+.footer-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-info-item i {
+    color: var(--brand-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.footer-social a {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transform: none;
+    padding: 0;
+}
+
+.footer-social a:hover {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: white !important;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-gold);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 1.25rem 0;
+    margin-top: 3rem;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* ===================================================
+   ANIMATIONS
+   =================================================== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.fade-in-up { animation: fadeInUp 0.55s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.fade-in    { animation: fadeIn 0.4s ease both; }
+
+.fade-in-up:nth-child(1) { animation-delay: 0ms; }
+.fade-in-up:nth-child(2) { animation-delay: 80ms; }
+.fade-in-up:nth-child(3) { animation-delay: 160ms; }
+.fade-in-up:nth-child(4) { animation-delay: 240ms; }
+.fade-in-up:nth-child(5) { animation-delay: 320ms; }
+.fade-in-up:nth-child(6) { animation-delay: 400ms; }
+
+/* Skeleton */
+.skeleton {
+    background: linear-gradient(90deg, var(--restaurant-cream) 25%, #f5ece0 50%, var(--restaurant-cream) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: var(--radius-md);
+}
+
+/* ===================================================
+   AUTH PAGES
+   =================================================== */
+.auth-wrapper {
+    min-height: 100vh;
+    background: var(--gradient-hero);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background: var(--surface);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    width: 100%;
+    max-width: 460px;
+}
+
+.auth-card-header {
+    background: var(--gradient-gold);
+    padding: 2.5rem 2rem;
+    text-align: center;
+}
+
+.auth-card-header .auth-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.auth-card-header h2 {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin: 0;
+}
+
+.auth-card-header p {
+    color: rgba(28, 28, 28, 0.65);
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0;
+}
+
+.auth-card-body {
+    padding: 2rem 2.5rem;
+}
+
+/* ===================================================
+   TRUST / INFO BADGES
+   =================================================== */
+.trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    background: var(--restaurant-cream);
+    border: 1.5px solid var(--border-warm);
+    border-radius: var(--radius-lg);
+    transition: all var(--ease-base);
+}
+
+.trust-badge:hover {
+    border-color: var(--brand-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.trust-badge i {
+    font-size: 1.4rem;
+    color: var(--brand-primary);
+}
+
+/* ===================================================
+   UTILITIES
+   =================================================== */
+.bg-restaurant-cream { background: var(--restaurant-cream) !important; }
+.bg-charcoal         { background: var(--charcoal) !important; color: white; }
+.bg-gold             { background: var(--gradient-gold) !important; }
+
+.text-gold           { color: var(--brand-primary); }
+.text-charcoal       { color: var(--charcoal); }
+.border-warm         { border-color: var(--border-warm) !important; }
+
+.shadow-gold         { box-shadow: var(--shadow-gold); }
+
+/* ===================================================
+   RESPONSIVE
+   =================================================== */
+@media (max-width: 768px) {
+    .menu-card-img-wrap { height: 200px; }
+    .card-body          { padding: 1.25rem; }
+    .btn                { padding: 0.55rem 1.25rem; }
+    .price-tag          { font-size: 1.3rem; }
+}
+
+@media (max-width: 576px) {
+    .hero-features      { flex-direction: column; gap: 0.5rem; }
+}
+
+/* ===================================================
+   PRINT
+   =================================================== */
+@media print {
+    .navbar-restaurant, .footer-restaurant, .btn { display: none !important; }
+    .card { box-shadow: none !important; border: 1px solid var(--border-warm) !important; }
 }
